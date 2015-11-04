@@ -1,0 +1,188 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 17-oct-2015, 17-oct-2015 13:25:01
+    Author     : matias
+*/
+
+/* === Dark layout === */
+.layout-bluegray .page,
+.layout-bluegray .login-screen-content,
+.page.layout-bluegray,
+.layout-bluegray .panel,
+.panel.layout-bluegray {
+  background-color: #607d8b;
+  color: rgba(255, 255, 255, 0.87);
+}
+.layout-bluegray .content-block-title {
+  color: rgba(255, 255, 255, 0.87);
+}
+.layout-bluegray .content-block-inner:before {
+  background-color: #393939;
+}
+.layout-bluegray .content-block-inner:after {
+  background-color: #393939;
+}
+.layout-bluegray .popover .list-block ul {
+  background: none;
+}
+.layout-bluegray .card {
+  background: #1c1c1c;
+}
+.layout-bluegray .card-header:after {
+  background-color: #393939;
+}
+.layout-bluegray .card-footer {
+  color: #bbbbbb;
+}
+.layout-bluegray .card-footer:before {
+  background-color: #393939;
+}
+.layout-bluegray .list-block ul:before,
+.list-block.layout-bluegray ul:before {
+  background-color: #393939;
+}
+.layout-bluegray .list-block ul:after,
+.list-block.layout-bluegray ul:after {
+  background-color: #393939;
+}
+.layout-bluegray .list-block.inset ul,
+.list-block.layout-bluegray.inset ul {
+  background: #1c1c1c;
+}
+.layout-bluegray .list-block.notifications > ul,
+.list-block.layout-bluegray.notifications > ul {
+  background: none;
+}
+.layout-bluegray li.sorting {
+  background-color: rgba(34, 34, 34, 0.8);
+}
+.layout-bluegray .swipeout-actions-left a,
+.layout-bluegray .swipeout-actions-right a {
+  background-color: #444444;
+}
+
+.theme-bluegray a {
+    color: #2196f3;
+}
+
+.theme-bluegray .button:not(.button-fill) {
+    color: #2196f3;
+}
+
+.layout-bluegray .item-inner:after,
+.layout-bluegray .list-block ul ul li:last-child .item-inner:after {
+  background-color: #393939;
+}
+.layout-bluegray .item-after,
+.layout-bluegray .item-text {
+  color: rgba(255, 255, 255, 0.7);
+}
+.layout-bluegray .list-block-label {
+  color: #bbbbbb;
+}
+.layout-bluegray .item-divider,
+.layout-bluegray .list-group-title {
+  background: #1a1a1a;
+  color: #bbbbbb;
+}
+.layout-bluegray .item-divider:before,
+.layout-bluegray .list-group-title:before {
+  background-color: #393939;
+}
+.layout-bluegray .contacts-block .list-group-title {
+  background: none;
+}
+html:not(.watch-active-state) .layout-bluegray .item-link:active,
+html:not(.watch-active-state) .layout-bluegray label.label-checkbox:active,
+html:not(.watch-active-state) .layout-bluegray label.label-radio:active,
+.layout-bluegray .item-link.active-state,
+.layout-bluegray label.label-checkbox.active-state,
+.layout-bluegray label.label-radio.active-state {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+.layout-bluegray .list-block input[type="text"],
+.layout-bluegray .list-block input[type="password"],
+.layout-bluegray .list-block input[type="search"],
+.layout-bluegray .list-block input[type="email"],
+.layout-bluegray .list-block input[type="tel"],
+.layout-bluegray .list-block input[type="url"],
+.layout-bluegray .list-block input[type="date"],
+.layout-bluegray .list-block input[type="datetime-local"],
+.layout-bluegray .list-block input[type="time"],
+.layout-bluegray .list-block input[type="number"],
+.layout-bluegray .list-block select,
+.layout-bluegray .list-block textarea {
+  color: #ffffff;
+}
+.layout-bluegray .list-block input[type="text"]::-webkit-input-placeholder,
+.layout-bluegray .list-block input[type="password"]::-webkit-input-placeholder,
+.layout-bluegray .list-block input[type="search"]::-webkit-input-placeholder,
+.layout-bluegray .list-block input[type="email"]::-webkit-input-placeholder,
+.layout-bluegray .list-block input[type="tel"]::-webkit-input-placeholder,
+.layout-bluegray .list-block input[type="url"]::-webkit-input-placeholder,
+.layout-bluegray .list-block input[type="date"]::-webkit-input-placeholder,
+.layout-bluegray .list-block input[type="datetime-local"]::-webkit-input-placeholder,
+.layout-bluegray .list-block input[type="time"]::-webkit-input-placeholder,
+.layout-bluegray .list-block input[type="number"]::-webkit-input-placeholder,
+.layout-bluegray .list-block select::-webkit-input-placeholder,
+.layout-bluegray .list-block textarea::-webkit-input-placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+.layout-bluegray .label-switch .checkbox {
+  background: rgba(255, 255, 255, 0.3);
+}
+.layout-bluegray .item-inner:not(.focus-state) .label,
+.layout-bluegray .item-inner:not(.focus-state) .floating-label {
+  color: rgba(255, 255, 255, 0.7);
+}
+.layout-bluegray .item-inner:not(.focus-state):not(.not-empty-state) .item-input-field:after,
+.layout-bluegray .item-inner:not(.focus-state):not(.not-empty-state) .input-field:after {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+.layout-bluegray label.label-checkbox i.icon-form-checkbox {
+  border-color: rgba(255, 255, 255, 0.7);
+}
+.layout-bluegray label.label-radio i.icon-form-radio {
+  border-color: rgba(255, 255, 255, 0.7);
+}
+.layout-bluegray .item-link.list-button:after {
+  background-color: #393939;
+}
+.layout-bluegray .page-content .ripple-wave {
+  background: rgba(255, 255, 255, 0.3);
+}
+html:not(.watch-active-state) .layout-bluegray .button:not(.button-fill):active,
+.layout-bluegray .button:not(.button-fill).active-state {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/*General*/
+.img-responsive{
+    max-width: 100%;
+    height: auto;
+    display:block;
+}
+.pull-left {
+  float: left !important;
+}
+.pull-right {
+  float: right !important;
+}
+
+/*icono menu lateral*/
+i.icon.icon-simor {
+  width: 50px;
+  height: 24px;
+  background-image: url("../img/logo.png");
+  border-radius: 3px;
+}
+
+/*modal*/
+.toolbar{
+    background-color: #0092FF !important;
+}
+
