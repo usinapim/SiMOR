@@ -56,9 +56,17 @@ colorGris = "#EEEEEE";
 var myDoughnutChart = false;
 
 var data = new Array ();
+
+var anchoPantalla = screen.width;
+var anchoImagen = anchoPantalla - 32;
+
+if (anchoImagen>300){
+    anchoImagen = 300;
+}
+
+console.log(anchoImagen);
+$$("#grafico").css('background-size', anchoImagen+'px 300px');
     
-
-
 //var color = {
 //    value: 1,
 //    color: colorGris,
