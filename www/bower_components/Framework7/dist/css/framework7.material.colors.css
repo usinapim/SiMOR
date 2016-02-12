@@ -4645,19 +4645,19 @@ html:not(.watch-active-state) .floating-button.color-gray:active,
   background-color: rgba(158, 158, 158, 0.3);
 }
 .color-bluegray {
-  color: #607d8b;
+  color: #555;
 }
 .list-block .item-link.list-button.color-bluegray,
 .tabbar a.active.color-bluegray,
 a.color-bluegray {
-  color: #607d8b;
+  color: #555;
 }
 .label-switch input[type="checkbox"]:checked + .checkbox.color-bluegray,
 .label-switch.color-bluegray input[type="checkbox"]:checked + .checkbox {
-  background-color: #607d8b;
+  background-color: #555;
 }
 .theme-bluegray .button:not(.button-fill) {
-  color: #607d8b;
+  color: #555;
 }
 .theme-bluegray .navbar .button:not(.button-fill),
 .theme-bluegray.navbar .button:not(.button-fill),
@@ -4669,10 +4669,10 @@ a.color-bluegray {
 }
 .button.color-bluegray:not(.button-fill),
 .color-bluegray.buttons-row .button:not(.button-fill) {
-  color: #607d8b !important;
+  color: #555 !important;
 }
 .theme-bluegray .button.button-fill {
-  background: #607d8b;
+  background: #555;
   color: #fff;
 }
 html:not(.watch-active-state) .theme-bluegray .button.button-fill:active,
@@ -4681,7 +4681,7 @@ html:not(.watch-active-state) .theme-bluegray .button.button-fill:active,
 }
 .button.button-fill.bg-bluegray,
 .button.button-fill.color-bluegray {
-  background: #607d8b !important;
+  background: #555 !important;
   color: #fff;
 }
 html:not(.watch-active-state) .button.button-fill.bg-bluegray:active,
@@ -4692,7 +4692,7 @@ html:not(.watch-active-state) .button.button-fill.color-bluegray:active,
 }
 .color-bluegray i.icon,
 i.icon.color-bluegray {
-  color: #607d8b;
+  color: #555;
 }
 i.icon-next.color-bluegray,
 i.icon-next.theme-bluegray {
@@ -4716,10 +4716,10 @@ i.icon-bars.theme-bluegray {
 }
 .preloader.color-bluegray svg circle,
 .preloader.preloader-bluegray svg circle {
-  stroke: #607d8b;
+  stroke: #555;
 }
 .theme-bluegray a {
-  color: #607d8b;
+  color: #555;
 }
 .theme-bluegray .navbar,
 .navbar.theme-bluegray,
@@ -4727,27 +4727,27 @@ i.icon-bars.theme-bluegray {
 .toolbar.theme-bluegray,
 .theme-bluegray .subnavbar,
 .subnavbar.theme-bluegray {
-  background-color: #607d8b;
+  background-color: #555;
 }
 .theme-bluegray .range-slider input[type="range"]::-webkit-slider-thumb:before,
 .range-slider.theme-bluegray input[type="range"]::-webkit-slider-thumb:before {
-  background-color: #607d8b;
+  background-color: #555;
 }
 .theme-bluegray .range-slider input[type="range"]::-webkit-slider-thumb,
 .range-slider.theme-bluegray input[type="range"]::-webkit-slider-thumb {
-  background-color: #607d8b;
+  background-color: #555;
 }
 .theme-bluegray .range-slider input[type="range"]::-ms-thumb,
 .range-slider.theme-bluegray input[type="range"]::-ms-thumb {
-  background-color: #607d8b;
+  background-color: #555;
 }
 .theme-bluegray .range-slider input[type="range"]::-ms-fill-lower,
 .range-slider.theme-bluegray input[type="range"]::-ms-fill-lower {
-  background-color: #607d8b;
+  background-color: #555;
 }
 .theme-bluegray .range-slider input[type="range"]::-moz-range-thumb,
 .range-slider.theme-bluegray input[type="range"]::-moz-range-thumb {
-  background-color: #607d8b;
+  background-color: #555;
 }
 .theme-bluegray .label-switch input[type="checkbox"]:checked + .checkbox,
 .label-switch.theme-bluegray input[type="checkbox"]:checked + .checkbox {
@@ -4755,7 +4755,7 @@ i.icon-bars.theme-bluegray {
 }
 .theme-bluegray .label-switch input[type="checkbox"]:checked + .checkbox:after,
 .label-switch.theme-bluegray input[type="checkbox"]:checked + .checkbox:after {
-  background-color: #607d8b;
+  background-color: #555;
 }
 .theme-bluegray label.label-checkbox,
 label.label-checkbox.theme-bluegray {
@@ -4777,12 +4777,12 @@ label.label-checkbox.theme-bluegray input[type="radio"]:checked ~ .item-after i.
 label.label-checkbox.theme-bluegray input[type="checkbox"]:checked ~ .item-inner i.icon-form-checkbox,
 .theme-bluegray label.label-checkbox input[type="radio"]:checked ~ .item-inner i.icon-form-checkbox,
 label.label-checkbox.theme-bluegray input[type="radio"]:checked ~ .item-inner i.icon-form-checkbox {
-  border-color: #607d8b;
-  background-color: #607d8b;
+  border-color: #555;
+  background-color: #555;
 }
 .theme-bluegray label.label-radio i.icon-form-radio:after,
 label.label-radio.theme-bluegray i.icon-form-radio:after {
-  background-color: #607d8b;
+  background-color: #555;
 }
 .theme-bluegray label.label-radio input[type="checkbox"]:checked + .item-media i.icon-form-radio,
 label.label-radio.theme-bluegray input[type="checkbox"]:checked + .item-media i.icon-form-radio,
@@ -4796,7 +4796,7 @@ label.label-radio.theme-bluegray input[type="radio"]:checked ~ .item-after i.ico
 label.label-radio.theme-bluegray input[type="checkbox"]:checked ~ .item-inner i.icon-form-radio,
 .theme-bluegray label.label-radio input[type="radio"]:checked ~ .item-inner i.icon-form-radio,
 label.label-radio.theme-bluegray input[type="radio"]:checked ~ .item-inner i.icon-form-radio {
-  border-color: #607d8b;
+  border-color: #555;
 }
 .theme-bluegray label.label-radio input[type="checkbox"]:checked + .item-media i.icon-form-radio:after,
 label.label-radio.theme-bluegray input[type="checkbox"]:checked + .item-media i.icon-form-radio:after,
@@ -4810,37 +4810,37 @@ label.label-radio.theme-bluegray input[type="radio"]:checked ~ .item-after i.ico
 label.label-radio.theme-bluegray input[type="checkbox"]:checked ~ .item-inner i.icon-form-radio:after,
 .theme-bluegray label.label-radio input[type="radio"]:checked ~ .item-inner i.icon-form-radio:after,
 label.label-radio.theme-bluegray input[type="radio"]:checked ~ .item-inner i.icon-form-radio:after {
-  background-color: #607d8b;
+  background-color: #555;
 }
 .theme-bluegray .focus-state .label,
 .theme-bluegray .focus-state .floating-label {
-  color: #607d8b;
+  color: #555;
 }
 .theme-bluegray .item-input-field.focus-state:after,
 .theme-bluegray .input-field.focus-state:after,
 .theme-bluegray .item-input-field.not-empty-state:after,
 .theme-bluegray .input-field.not-empty-state:after {
-  background: #607d8b;
+  background: #555;
 }
 .theme-bluegray .picker-calendar-day.picker-calendar-day-today span {
-  color: #607d8b;
+  color: #555;
 }
 .theme-bluegray .picker-calendar-day.picker-calendar-day-selected span {
-  background-color: #607d8b;
+  background-color: #555;
   color: #fff;
 }
 .theme-bluegray .picker-calendar-day.picker-calendar-day-has-events span:after {
-  background-color: #607d8b;
+  background-color: #555;
 }
 .theme-bluegray .picker-header {
-  background-color: #607d8b;
+  background-color: #555;
 }
 .theme-bluegray .modal-button {
-  color: #607d8b;
+  color: #555;
 }
 .swiper-pagination.color-bluegray .swiper-pagination-bullet-active,
 .theme-bluegray .swiper-pagination .swiper-pagination-bullet-active {
-  background-color: #607d8b;
+  background-color: #555;
 }
 .swiper-button-next.color-bluegray,
 .swiper-container-rtl .swiper-button-prev.color-bluegray,
@@ -4858,10 +4858,10 @@ label.label-radio.theme-bluegray input[type="radio"]:checked ~ .item-inner i.ico
 a.bg-bluegray,
 .list-block .swipeout-actions-left a.bg-bluegray,
 .list-block .swipeout-actions-right a.bg-bluegray {
-  background-color: #607d8b;
+  background-color: #555;
 }
 .border-bluegray {
-  border-color: #607d8b;
+  border-color: #555;
 }
 .list-block .border-bluegray.item-inner:after,
 .list-block ul.border-bluegray:after,
@@ -4869,13 +4869,13 @@ a.bg-bluegray,
 .list-block .border-bluegray.item-inner:before,
 .list-block ul.border-bluegray:before,
 .border-bluegray:before {
-  background-color: #607d8b;
+  background-color: #555;
 }
 .theme-bluegray .floating-button,
 .floating-button.theme-bluegray,
 .floating-button.color-bluegray {
   color: #fff;
-  background: #607d8b;
+  background: #555;
 }
 html:not(.watch-active-state) .theme-bluegray .floating-button:active,
 html:not(.watch-active-state) .floating-button.theme-bluegray:active,

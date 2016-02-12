@@ -19,7 +19,7 @@
         <style>
             .donut-inner
             {
-                margin-top: -100px;
+                margin-top: -220px;
                 margin-bottom: 100px;
             }
             .donut-inner h5
@@ -28,6 +28,23 @@
                 margin-top: 0;
             }
             .donut-inner span {font-size: 10px;}
+
+            canvas{
+                width: 100% !important;
+                max-width: 1500px;
+                height: 300px !important;
+            }
+
+            .donut-inner span {
+                font-size: large;
+            }
+            .hidden{
+                display: none;
+            }
+            .item-content{
+                border: none !important;
+                padding: 0px;
+            }
         </style>
     </head>
     <body class="theme-bluegray layout-bluegray">
@@ -37,8 +54,8 @@
             <div class="view navbar-fixed">
                 <div class="pages">
                     <div data-page="panel-left" class="page">
-                        <div class="navbar">
-                            <div class="navbar-inner">
+                        <div class="navbar" >
+                            <div class="navbar-inner" >
                                 <div class="center">SiMOR</div>
                             </div>
                         </div>
@@ -54,7 +71,17 @@
                                                 <div class="item-inner"> 
                                                     <div class="item-title">Acerca de</div>
                                                 </div>
-                                            </div></a></li>
+                                            </div></a>
+                                    </li>
+                                    <li><a href="#" class="close-panel" onclick="navigator.app.exitApp();"> 
+                                            <div class="item-content">
+                                                 <div class="item-media"><i class="icon icon-prev"></i></div>
+                                                <div class="item-inner"> 
+                                                    <div class="item-title">Salir </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
 
                                 </ul>
                             </div>
@@ -69,7 +96,7 @@
                 <div class="pages navbar-fixed">
                     <div data-page="index" class="page">
                         <div class="navbar">
-                            <div class="navbar-inner">
+                            <div class="navbar-inner" >
 
                                 <div class="left"><a href="#" class="open-panel link icon-only"><i class="icon icon-bars"></i></a></div>
                                 <div class="left">
@@ -77,15 +104,20 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="page-content">
+                        <div class="page-content" >
                             <div class="content-block">
                                 <div class="row">
                                     <!--<div class="col-33"></div>-->
-                                    <div  style="text-align: center;" class="col-100 ">
-                                        <canvas id="grafico" width="320"></canvas>
+                                    <div  style="text-align: center;" class="col-100">
+                                        <canvas id="grafico" class="" style="background: url(img/circulo_blanco.png) no-repeat fixed center; " ></canvas>
+                                        <!--<img src="img/circulo_blanco.png"  id="img-circulo" alt=""/>-->
                                         <div class="donut-inner">
-                                            <h5 id="valor-rio"> Altura actual en metros</h5>
-                                            <span id="descripcion-rio">Variación en metros</span>
+                                            <span id="descripcion-rio">variación en mts</span>
+                                            <h1 id="valor-rio" style="margin: 0px;"> altura en mts</h1>
+                                            <div class="row">
+                                                <div class="col-50" style="text-align: right;"><span style="color: #FFC870;" id="valor-alerta">alerta</span></div>
+                                                <div class="col-50 " style="text-align: left;"><span style="color: #FF5A5E; " id="valor-evacuacion">evacuac.</span></div>
+                                            </div>
                                         </div>
                                     </div>
                                     <!--<div class="col-33"></div>-->
@@ -94,16 +126,16 @@
                             <div class="content-block">
 
                                 <div class="row">
-                                    <div class="col-50">
+                                    <div class="col-60">
                                         <div class="right">
-                                            <div class="content-block-title">Ubicacion</div>
+                                            <div class="content-block-title">Ubicación</div>
                                             <div class="list-block">
                                                 <ul>
                                                     <li>
                                                         <div class="item-content">
                                                             <div class="item-inner"> 
                                                                 <div class="item-input">
-                                                                    <input type="text" placeholder="Seleccionar Ubicacion" readonly="readonly" id="ks-picker-ubicacion"/>
+                                                                    <input type="text" placeholder="Seleccionar ubicación" readonly="readonly" id="ks-picker-ubicacion"/>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -112,8 +144,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-50">
-                                        <div class="content-block-title">Rio</div>
+                                    <div class="col-40">
+                                        <div class="content-block-title">Río</div>
                                         <label class="" id="nombre-rio"></label>
                                     </div>
                                 </div>

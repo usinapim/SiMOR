@@ -14,7 +14,8 @@ and open the template in the editor.
 .page.layout-bluegray,
 .layout-bluegray .panel,
 .panel.layout-bluegray {
-  background-color: #607d8b;
+  background-color: #393939;
+  background-color: #555;
   color: rgba(255, 255, 255, 0.87);
 }
 .layout-bluegray .content-block-title {
