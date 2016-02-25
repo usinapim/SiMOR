@@ -3,6 +3,8 @@ var myApp = new Framework7({
     modalTitle: 'SiMOR',
     // Enable Material theme
     material: true,
+    // If it is webapp, we can enable hash navigation:
+    pushState: true,
 });
 
 // Expose Internal DOM library
@@ -55,18 +57,18 @@ colorActual = "#000";
 colorGris = "#EEEEEE";
 var myDoughnutChart = false;
 
-var data = new Array ();
+var data = new Array();
 
 var anchoPantalla = screen.width;
 var anchoImagen = anchoPantalla - 32;
 
-if (anchoImagen>300){
+if (anchoImagen > 300) {
     anchoImagen = 300;
 }
 
 console.log(anchoImagen);
-$$("#grafico").css('background-size', anchoImagen+'px 300px');
-    
+$$("#grafico").css('background-size', anchoImagen + 'px 300px');
+
 //var color = {
 //    value: 1,
 //    color: colorGris,
@@ -147,7 +149,7 @@ function buscarMedidaByPuerto(puerto) {
             value: porcentajeValor,
             color: colorAzul,
             highlight: colorAzul,
-             label: "Estado actual seguro a " + valor + " metros",
+            label: "Estado actual seguro a " + valor + " metros",
         };
 
         data.push(color);
@@ -235,7 +237,6 @@ function buscarMedidaByPuerto(puerto) {
             value: porcentajeValorEvacuacion - porcentajeValor - 1,
             color: colorGris,
             highlight: colorGris,
-            
         };
 
         data.push(color);
@@ -256,8 +257,6 @@ function buscarMedidaByPuerto(puerto) {
             value: 100 - porcentajeValorEvacuacion,
             color: colorGris,
             highlight: colorGris,
-           
-           
         };
 
         data.push(color);
@@ -293,7 +292,7 @@ function buscarMedidaByPuerto(puerto) {
             value: porcentajeValorEvacuacion - porcentajeValorAlerta - 1,
             color: colorAzul,
             highlight: colorAzul
-            
+
         };
 
         data.push(color);
@@ -309,12 +308,12 @@ function buscarMedidaByPuerto(puerto) {
 
 
         data.push(color);
-        
+
         var color = {
-            value: porcentajeValor - porcentajeValorEvacuacion ,
+            value: porcentajeValor - porcentajeValorEvacuacion,
             color: colorAzul,
             label: "Estado actual de evacuación a " + valor + " metros"
-            
+
         };
 
         data.push(color);
@@ -324,7 +323,7 @@ function buscarMedidaByPuerto(puerto) {
             value: 100 - porcentajeValor,
             color: colorGris,
             highlight: colorGris
-            
+
         };
 
         data.push(color);
@@ -335,22 +334,22 @@ function buscarMedidaByPuerto(puerto) {
 
 
     $$("#grafico").removeClass('hidden');
-    $$("#img-circulo").css('display','none');
+    $$("#img-circulo").css('display', 'none');
     $$("#grafico").html('');
 
     var ctx = document.getElementById("grafico").getContext("2d");
 
 
-        if (myDoughnutChart)
-            myDoughnutChart.destroy();
-    
-     myDoughnutChart = new Chart(ctx).Doughnut(data, {
+    if (myDoughnutChart)
+        myDoughnutChart.destroy();
+
+    myDoughnutChart = new Chart(ctx).Doughnut(data, {
         responsive: false,
         tooltipTemplate: "<%if (label){%><%=label%> <%}%>",
         percentageInnerCutout: 65,
         segmentStrokeColor: "rgba(255, 255, 255, 0)",
-         //animation : false, 
-        
+        //animation : false, 
+
 
     });
 
@@ -360,11 +359,11 @@ function buscarMedidaByPuerto(puerto) {
     textoDescripcion = controlNivel(retorno.variacion);
 
     textoColor = controlNivelColor(retorno.variacion);
-    
+
     $$("#valor-rio").html(textoValor);
     $$("#descripcion-rio").html(textoDescripcion).css("color", textoColor);
-    $$("#valor-alerta").html(valorAlerta+ ' mt <br> alerta');
-    $$("#valor-evacuacion").html(valorEvacuacion+ ' mt <br> evacuac.');
+    $$("#valor-alerta").html(valorAlerta + ' mt <br> alerta');
+    $$("#valor-evacuacion").html(valorEvacuacion + ' mt <br> evacuac.');
 
     return retorno;
 }
@@ -389,11 +388,11 @@ function controlNivel(variacion) {
 }
 
 
-function controlNivelColor (variacion) {
+function controlNivelColor(variacion) {
     variacion = parseFloat(variacion.replace(',', '.'));
 
     var color = '#FFF';
-   
+
     if (variacion > 0) {
         color = colorRojo;
     }
@@ -401,7 +400,7 @@ function controlNivelColor (variacion) {
     if (variacion < 0) {
         color = colorVerde;
     }
-    
+
     if (variacion == 0) {
         color = colorAzul;
     }
@@ -412,9 +411,11 @@ function controlNivelColor (variacion) {
 //cuando inicializa la app
 var ubicacion = new Array();
 var datos = new Array();
+var tips = new Array();
+var ubicacionConCoordenada = new Array();
 $$.ajax({
-    url: 'http://179.43.125.144/simor_web_service/api/niveles.json',
-    //url: 'http://localhost/SiMOR-backend/web/app.php/api/niveles.json',
+//    url: 'http://fundacionpim.com.ar/simor_web_service/api/niveles.json',
+    url: 'http://192.168.56.101/SiMOR-backend/web/app_dev.php/api/niveles.json',
     dataType: 'json',
     async: false,
     success: function (data) {
@@ -424,6 +425,9 @@ $$.ajax({
                 datos.push(dato);
 
                 ubicacion.push(dato.puerto);
+                if (dato.latitud != undefined && dato.longitud != undefined) {
+                    ubicacionConCoordenada.push(dato)
+                }
             }
 
         });
@@ -433,6 +437,30 @@ $$.ajax({
 });
 
 console.log(datos);
+
+$$.ajax({
+    url: 'http://fundacionpim.com.ar/simor_web_service/api/tips.json',
+//    url: 'http://192.168.56.101/SiMOR-backend/web/app_dev.php/api/tips.json',
+    dataType: 'json',
+    async: false,
+    success: function (data) {
+        $$.each(data.tips, function (id, dato) {
+            tips.push(dato);
+            $$('.swiper-wrapper').append('<div class="swiper-slide"><span>' + dato.descripcion + '</span></div>')
+
+        });
+
+    }
+});
+
+// Init slider and store its instance in mySwiper variable
+var mySwiper = myApp.swiper('.swiper-container', {
+    pagination: '.swiper-pagination',
+    direction: 'vertical'
+});
+
+console.log(tips);
+
 var pickerUbicacion = myApp.picker({
     toolbarCloseText: 'OK',
     input: '#ks-picker-ubicacion',
@@ -452,3 +480,74 @@ var pickerUbicacion = myApp.picker({
         buscarMedidaByPuerto(picker.value);
     }
 });
+/** Converts numeric degrees to radians */
+if (typeof (Number.prototype.toRad) === "undefined") {
+    Number.prototype.toRad = function () {
+        return this * Math.PI / 180;
+    }
+}
+
+function getDistance(lat1, lon1, lat2, lon2) {
+//    posadas
+//    var lat2 = -27.351837;
+//    var lon2 = -55.899124;
+//    caxia
+//    var lat2 = -25.559915;
+//    var lon2 = -53.107878;
+
+    // Latitude/longitude spherical geodesy formulae & scripts (c) Chris Veness 2002-2011                   - www.movable-type.co.uk/scripts/latlong.html 
+// where R is earth’s radius (mean radius = 6,371km);
+// note that angles need to be in radians to pass to trig functions!
+    var R = 6371; // km
+    var dLat = (lat2 - lat1).toRad();
+    var dLon = (lon2 - lon1).toRad();
+    var lat1 = lat1.toRad();
+    var lat2 = lat2.toRad();
+
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c;
+
+    return d;
+}
+//geolocalizacion
+var onSuccess = function (position) {
+
+    var lat1 = position.coords.latitude;
+    var lon1 = position.coords.longitude;
+
+    var distancia = 0;
+    var puerto = null;
+
+    $$.each(ubicacionConCoordenada, function (id, dato) {
+        var distanciaCal = getDistance(lat1, lon1, parseFloat(dato.latitud), parseFloat(dato.longitud));
+        
+        if (distancia < distanciaCal) {
+            distancia = distanciaCal;
+            puerto = dato.puerto;
+        }
+
+    });
+    console.log(puerto);
+
+//    myApp.alert('Latitude: ' + position.coords.latitude + '\n' +
+//            'Longitude: ' + position.coords.longitude + '\n' +
+//            'Altitude: ' + position.coords.altitude + '\n' +
+//            'Accuracy: ' + position.coords.accuracy + '\n' +
+//            'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '\n' +
+//            'Heading: ' + position.coords.heading + '\n' +
+//            'Speed: ' + position.coords.speed + '\n' +
+//            'Timestamp: ' + position.timestamp + '\n');
+};
+
+// onError Callback receives a PositionError object
+//
+function onError(error) {
+    myApp.alert('code: ' + error.code + '\n' +
+            'message: ' + error.message + '\n');
+}
+
+navigator.geolocation.getCurrentPosition(onSuccess, onError);
+
+

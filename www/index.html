@@ -40,10 +40,30 @@
             }
             .hidden{
                 display: none;
-            }
+            }            
             .item-content{
                 border: none !important;
                 padding: 0px;
+            }            
+            .list-block ul::before{
+                height: 0;
+            }
+            .list-block ul::after{
+                height: 0;
+            }
+            /*tips*/
+            .swiper-container {
+                height: 120px;
+            }
+            .swiper-slide {
+                background:#ffff66;
+                color: black;
+            }
+            .swiper-slide span {
+                text-align:center;
+                display:block;
+                margin:20px;
+                font-size:15px;
             }
         </style>
     </head>
@@ -75,7 +95,7 @@
                                     </li>
                                     <li><a href="#" class="close-panel" onclick="navigator.app.exitApp();"> 
                                             <div class="item-content">
-                                                 <div class="item-media"><i class="icon icon-prev"></i></div>
+                                                <div class="item-media"><i class="icon icon-prev"></i></div>
                                                 <div class="item-inner"> 
                                                     <div class="item-title">Salir </div>
                                                 </div>
@@ -146,18 +166,42 @@
                                     </div>
                                     <div class="col-40">
                                         <div class="content-block-title">Río</div>
-                                        <label class="" id="nombre-rio"></label>
+                                        <div class="list-block">
+                                            <ul>
+                                                <li>
+                                                    <div class="item-content">
+                                                        <div class="item-inner"> 
+                                                            <div class="">
+                                                                <label class="" id="nombre-rio"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
                             <div class="content-block">
                                 <div class="row">
                                     <div class="col-25">
-
+                                        <span>Tips:</span>
                                     </div>
-                                    <div class="col-75">
+                                </div>
+                                <div class="row">
+                                    <div class="col-100">
+                                        <div class="swiper-container">
+                                            <div class="swiper-wrapper">
 
+                                            </div>
+                                            <div class="swiper-pagination"></div>
+                                        </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="content-block">
+                                <div class="row">
                                 </div>
                             </div>
                         </div>
@@ -169,59 +213,29 @@
 
         <!--<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>-->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAd1ItQBdOQiV452axhP-snjDUhMHH8L4s"> </script>
 
 
         <script>
-
-//            var data = [
-//                {
-//                    value: 100,
-//                    highlight: "#000",
-//                    color: "#FFC870",
-//                    label: "Yellow"
-//                },
-//                {
-//                    value: 200,
-//                    highlight: "#0092FF",
-//                    color: "#FF5A5E",
-//                    label: "Red"
-//                },
-//                {
-//                    value: 100,
-//                    color: "#0092FF",
-//                    color: "#5AD3D1",
-//                            label: "Green"
-//                }
+//                                        var onSuccess = function (position) {
+//                                            alert('Latitude: ' + position.coords.latitude + '\n' +
+//                                                    'Longitude: ' + position.coords.longitude + '\n' +
+//                                                    'Altitude: ' + position.coords.altitude + '\n' +
+//                                                    'Accuracy: ' + position.coords.accuracy + '\n' +
+//                                                    'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '\n' +
+//                                                    'Heading: ' + position.coords.heading + '\n' +
+//                                                    'Speed: ' + position.coords.speed + '\n' +
+//                                                    'Timestamp: ' + position.timestamp + '\n');
+//                                        };
 //
-//            ];
+//// onError Callback receives a PositionError object
+////
+//                                        function onError(error) {
+//                                            alert('code: ' + error.code + '\n' +
+//                                                    'message: ' + error.message + '\n');
+//                                        }
 //
-//
-//
-//
-//            var ctx = document.getElementById("grafico").getContext("2d");
-//
-//            var myDoughnutChart = new Chart(ctx).Doughnut(data);
-
-
-            var onSuccess = function (position) {
-                alert('Latitude: ' + position.coords.latitude + '\n' +
-                        'Longitude: ' + position.coords.longitude + '\n' +
-                        'Altitude: ' + position.coords.altitude + '\n' +
-                        'Accuracy: ' + position.coords.accuracy + '\n' +
-                        'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '\n' +
-                        'Heading: ' + position.coords.heading + '\n' +
-                        'Speed: ' + position.coords.speed + '\n' +
-                        'Timestamp: ' + position.timestamp + '\n');
-            };
-
-// onError Callback receives a PositionError object
-//
-            function onError(error) {
-                alert('code: ' + error.code + '\n' +
-                        'message: ' + error.message + '\n');
-            }
-
-            navigator.geolocation.getCurrentPosition(onSuccess, onError);
+//                                        navigator.geolocation.getCurrentPosition(onSuccess, onError);
 
 
         </script>
