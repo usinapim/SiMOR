@@ -414,8 +414,8 @@ var datos = new Array();
 var tips = new Array();
 var ubicacionConCoordenada = new Array();
 $$.ajax({
-//    url: 'http://fundacionpim.com.ar/simor_web_service/api/niveles.json',
-    url: 'http://192.168.56.101/SiMOR-backend/web/app_dev.php/api/niveles.json',
+    url: 'http://fundacionpim.com.ar/simor_web_service/api/niveles.json',
+    //url: 'http://192.168.56.101/SiMOR-backend/web/app_dev.php/api/niveles.json',
     dataType: 'json',
     async: false,
     success: function (data) {
@@ -487,6 +487,10 @@ if (typeof (Number.prototype.toRad) === "undefined") {
     }
 }
 
+function exitApp (){
+    navigator.app.exitApp();
+}
+
 function getDistance(lat1, lon1, lat2, lon2) {
 //    posadas
 //    var lat2 = -27.351837;
@@ -517,19 +521,23 @@ var onSuccess = function (position) {
     var lat1 = position.coords.latitude;
     var lon1 = position.coords.longitude;
 
-    var distancia = 0;
+    var distancia = Number.MAX_VALUE;
     var puerto = null;
 
     $$.each(ubicacionConCoordenada, function (id, dato) {
         var distanciaCal = getDistance(lat1, lon1, parseFloat(dato.latitud), parseFloat(dato.longitud));
         
-        if (distancia < distanciaCal) {
+        if (distanciaCal < distancia) {
             distancia = distanciaCal;
             puerto = dato.puerto;
         }
 
     });
     console.log(puerto);
+    
+    pickerUbicacion.open()
+    pickerUbicacion.setValue([puerto]);
+    pickerUbicacion.close()
 
 //    myApp.alert('Latitude: ' + position.coords.latitude + '\n' +
 //            'Longitude: ' + position.coords.longitude + '\n' +
