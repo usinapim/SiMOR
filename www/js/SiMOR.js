@@ -5,6 +5,8 @@ var myApp = new Framework7({
     material: true,
     // If it is webapp, we can enable hash navigation:
     pushState: true,
+    modalButtonCancel:'Ahora no',
+    modalButtonOk: 'Si'
 });
 
 // Expose Internal DOM library
@@ -30,9 +32,35 @@ $$(document).on('ajaxComplete', function () {
 
 
 myApp.onPageInit('about', function (page) {
+
 //    $$(page.container).find('.content-block').append('')
     $$.get("terminos.html", function (data) {
         $$(page.container).find('.content-block').html(data);
+    });
+});
+
+myApp.onPageInit('notificaciones', function (page) {
+    $$.ajax({
+         url: 'http://fundacionpim.com.ar/simor_web_service/api/tips.json',
+        //url: 'http://192.168.1.104/SiMOR-backend/web/app_dev.php/api/tips.json',
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+
+
+            $$.each(data.tips, function (id, dato) {
+                tips.push(dato);
+                $$('.swiper-wrapper').append('<div class="swiper-slide"><span>' + dato.descripcion + '</span></div>')
+
+            });
+
+            var mySwiper = myApp.swiper('.swiper-container', {
+                pagination: '.swiper-pagination',
+                direction: 'vertical'
+            });
+
+
+        }
     });
 });
 
@@ -415,7 +443,7 @@ var tips = new Array();
 var ubicacionConCoordenada = new Array();
 $$.ajax({
     url: 'http://fundacionpim.com.ar/simor_web_service/api/niveles.json',
-    //url: 'http://192.168.56.101/SiMOR-backend/web/app_dev.php/api/niveles.json',
+    //url: 'http://192.168.1.104/SiMOR-backend/web/app_dev.php/api/niveles.json',
     dataType: 'json',
     async: false,
     success: function (data) {
@@ -439,30 +467,27 @@ $$.ajax({
 console.log(datos);
 
 $$.ajax({
-    url: 'http://fundacionpim.com.ar/simor_web_service/api/tips.json',
-//    url: 'http://192.168.56.101/SiMOR-backend/web/app_dev.php/api/tips.json',
+     url: 'http://fundacionpim.com.ar/simor_web_service/api/tips.json',
+    //url: 'http://192.168.1.104/SiMOR-backend/web/app_dev.php/api/tips.json',
     dataType: 'json',
     async: false,
     success: function (data) {
-        $$.each(data.tips, function (id, dato) {
-            tips.push(dato);
-            $$('.swiper-wrapper').append('<div class="swiper-slide"><span>' + dato.descripcion + '</span></div>')
+        console.log(data.tips.length);
+        if (data.tips.length > 0) {
+            myApp.confirm('Tenés notificaciones. Querés verlas?', 'Notificaciones y tips', function () {
+                mainView.router.loadPage('notificaciones.html');
+            });
+        }
 
-        });
+
 
     }
 });
 
-// Init slider and store its instance in mySwiper variable
-var mySwiper = myApp.swiper('.swiper-container', {
-    pagination: '.swiper-pagination',
-    direction: 'vertical'
-});
 
-console.log(tips);
 
 var pickerUbicacion = myApp.picker({
-    toolbarCloseText: 'OK',
+    toolbarCloseText: 'Ver datos',
     input: '#ks-picker-ubicacion',
     cols: [
         {
@@ -487,7 +512,7 @@ if (typeof (Number.prototype.toRad) === "undefined") {
     }
 }
 
-function exitApp (){
+function exitApp() {
     navigator.app.exitApp();
 }
 
@@ -526,7 +551,7 @@ var onSuccess = function (position) {
 
     $$.each(ubicacionConCoordenada, function (id, dato) {
         var distanciaCal = getDistance(lat1, lon1, parseFloat(dato.latitud), parseFloat(dato.longitud));
-        
+
         if (distanciaCal < distancia) {
             distancia = distanciaCal;
             puerto = dato.puerto;
@@ -534,7 +559,7 @@ var onSuccess = function (position) {
 
     });
     console.log(puerto);
-    
+
     pickerUbicacion.open()
     pickerUbicacion.setValue([puerto]);
     pickerUbicacion.close()
