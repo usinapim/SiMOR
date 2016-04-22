@@ -5,7 +5,7 @@ var myApp = new Framework7({
     material: true,
     // If it is webapp, we can enable hash navigation:
     pushState: true,
-    modalButtonCancel:'Ahora no',
+    modalButtonCancel: 'Ahora no',
     modalButtonOk: 'Si'
 });
 
@@ -41,7 +41,7 @@ myApp.onPageInit('about', function (page) {
 
 myApp.onPageInit('notificaciones', function (page) {
     $$.ajax({
-         url: 'http://fundacionpim.com.ar/simor_web_service/api/tips.json',
+        url: 'http://fundacionpim.com.ar/simor_web_service/api/tips.json',
         //url: 'http://192.168.1.104/SiMOR-backend/web/app_dev.php/api/tips.json',
         dataType: 'json',
         async: false,
@@ -467,7 +467,7 @@ $$.ajax({
 console.log(datos);
 
 $$.ajax({
-     url: 'http://fundacionpim.com.ar/simor_web_service/api/tips.json',
+    url: 'http://fundacionpim.com.ar/simor_web_service/api/tips.json',
     //url: 'http://192.168.1.104/SiMOR-backend/web/app_dev.php/api/tips.json',
     dataType: 'json',
     async: false,
@@ -584,3 +584,117 @@ function onError(error) {
 navigator.geolocation.getCurrentPosition(onSuccess, onError);
 
 
+//location
+function onDeviceReady() {        
+    
+    $$('body').addClass(device.platform.toLowerCase());
+
+    // Bind events
+    $$(document).on("resume", onResume);
+    $$('#do-check').on("click", checkState);
+
+    // Register change listeners for iOS
+    if(device.platform === "iOS") {
+        cordova.plugins.diagnostic.registerLocationAuthorizationStatusChangeHandler(function(status){
+            console.log("Location authorization status changed to: "+status);
+            checkState();
+        });
+    }
+
+    // iOS settings
+    
+    $$('#request-location-always').on("click", function(){
+        cordova.plugins.diagnostic.requestLocationAuthorization(function(){
+            console.log("Successfully requested location authorization always");
+        }, function(error){
+            console.error(error);
+        }, "always");
+    });
+
+    $$('#request-location-in-use').on("click", function(){
+        cordova.plugins.diagnostic.requestLocationAuthorization(function(){
+            console.log("Successfully requested location authorization when in use");
+        }, function(error){
+            console.error(error);
+        }, "when_in_use");
+    });
+
+    // Android settings
+    $$('#location-settings').on("click", function(){
+        cordova.plugins.diagnostic.switchToLocationSettings();
+    });
+
+    $$('#mobile-data-settings').on("click", function(){
+        cordova.plugins.diagnostic.switchToMobileDataSettings();
+    });    
+
+    $$('#get-location').on("click", function(){
+        var posOptions = { timeout: 35000, enableHighAccuracy: true, maximumAge: 5000 };
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+            alert("Current position: "+lat+","+lon);
+        }, function (err) {
+            console.error("Position error: code="+ err.code + "; message=" + err.message);
+            alert("Position error\ncode="+ err.code + "\nmessage=" + err.message);
+        }, posOptions);
+    });   
+    
+
+    setTimeout(checkState, 500);
+}
+
+
+function checkState(){
+    console.log("Checking state...");
+
+    $$('#state li').removeClass('on off');
+
+    // Location
+    cordova.plugins.diagnostic.isLocationEnabled(function(enabled){
+        $$('#nombre-rio').addClass(enabled ? 'on' : 'off');
+        if (!enabled){
+            myApp.confirm('Si querés seleccionar el puerto mas cercarno, activa la ubicacion', 'Ubicacion', function () {
+                cordova.plugins.diagnostic.switchToLocationSettings();
+                navigator.geolocation.getCurrentPosition(onSuccess, onError);
+            });
+            
+        }
+    }, onError);
+
+    if(device.platform === "iOS"){
+        cordova.plugins.diagnostic.isLocationEnabledSetting(function(enabled){
+            $$('#state .location-setting').addClass(enabled ? 'on' : 'off');
+        }, onError);
+
+        cordova.plugins.diagnostic.isLocationAuthorized(function(enabled){
+            $$('#state .location-authorization').addClass(enabled ? 'on' : 'off');
+        }, onError);
+
+        cordova.plugins.diagnostic.getLocationAuthorizationStatus(function(status){
+            $$('#state .location-authorization-status').find('.value').text(status.toUpperCase());
+            $$('.request-location').toggle(status === "not_determined");
+        }, onError);
+    }
+
+    if(device.platform === "Android"){
+        cordova.plugins.diagnostic.isGpsLocationEnabled(function(enabled){
+            $$('#state .gps-location').addClass(enabled ? 'on' : 'off');
+        }, onError);
+
+        cordova.plugins.diagnostic.isNetworkLocationEnabled(function(enabled){
+            $$('#state .network-location').addClass(enabled ? 'on' : 'off');
+        }, onError);
+
+        cordova.plugins.diagnostic.getLocationMode(function(mode){
+            $$('#state .location-mode').find('.value').text(mode.toUpperCase());
+        }, onError);
+    }
+}
+
+function onResume(){
+    checkState();
+}
+
+
+$$(document).on("deviceready", onDeviceReady);
