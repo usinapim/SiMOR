@@ -648,7 +648,7 @@ function onDeviceReady() {
         // susbcribir el equipo
         $$.ajax({
             // url: 'http://fundacionpim.com.ar/simor_web_service/api/susbcribe.json',
-            url: 'http://192.168.0.115/SiMOR-backend/web/app_dev.php/api/susbcribe.json',
+            url: 'http://fundacionpim.com.ar/simor_web_service/api/susbcribe.json',
             dataType: 'json',
             method: 'POST',
             async: false,
