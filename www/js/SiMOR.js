@@ -13,8 +13,7 @@ var myApp = new Framework7({
 var $$ = Dom7;
 
 // Add main view
-var mainView = myApp.addView('.view-main', {
-});
+var mainView = myApp.addView('.view-main', {});
 // Add another view, which is in right panel
 //var rightView = myApp.addView('.view-right', {
 //});
@@ -29,7 +28,10 @@ $$(document).on('ajaxComplete', function () {
 });
 
 
-
+//Funcion Salir
+function exitApp() {
+    navigator.app && navigator.app.exitApp && navigator.app.exitApp();
+}
 
 myApp.onPageInit('about', function (page) {
 
@@ -277,7 +279,6 @@ function buscarMedidaByPuerto(puerto) {
         };
 
 
-
         data.push(color);
 
 
@@ -326,7 +327,6 @@ function buscarMedidaByPuerto(puerto) {
         data.push(color);
 
 
-
         var color = {
             value: 1,
             color: colorRojo,
@@ -360,7 +360,6 @@ function buscarMedidaByPuerto(puerto) {
     }
 
 
-
     $$("#grafico").removeClass('hidden');
     $$("#img-circulo").css('display', 'none');
     $$("#grafico").html('');
@@ -380,7 +379,6 @@ function buscarMedidaByPuerto(puerto) {
 
 
     });
-
 
 
     textoValor = valor + ' metros';
@@ -480,10 +478,8 @@ $$.ajax({
         }
 
 
-
     }
 });
-
 
 
 var pickerUbicacion = myApp.picker({
@@ -534,7 +530,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
     var lat2 = lat2.toRad();
 
     var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+        Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c;
 
@@ -578,15 +574,15 @@ var onSuccess = function (position) {
 //
 function onError(error) {
     myApp.alert('code: ' + error.code + '\n' +
-            'message: ' + error.message + '\n');
+        'message: ' + error.message + '\n');
 }
 
 navigator.geolocation.getCurrentPosition(onSuccess, onError);
 
 
 //location
-function onDeviceReady() {        
-    
+function onDeviceReady() {
+
     $$('body').addClass(device.platform.toLowerCase());
 
     // Bind events
@@ -594,105 +590,145 @@ function onDeviceReady() {
     $$('#do-check').on("click", checkState);
 
     // Register change listeners for iOS
-    if(device.platform === "iOS") {
-        cordova.plugins.diagnostic.registerLocationAuthorizationStatusChangeHandler(function(status){
-            console.log("Location authorization status changed to: "+status);
+    if (device.platform === "iOS") {
+        cordova.plugins.diagnostic.registerLocationAuthorizationStatusChangeHandler(function (status) {
+            console.log("Location authorization status changed to: " + status);
             checkState();
         });
     }
 
     // iOS settings
-    
-    $$('#request-location-always').on("click", function(){
-        cordova.plugins.diagnostic.requestLocationAuthorization(function(){
+
+    $$('#request-location-always').on("click", function () {
+        cordova.plugins.diagnostic.requestLocationAuthorization(function () {
             console.log("Successfully requested location authorization always");
-        }, function(error){
+        }, function (error) {
             console.error(error);
         }, "always");
     });
 
-    $$('#request-location-in-use').on("click", function(){
-        cordova.plugins.diagnostic.requestLocationAuthorization(function(){
+    $$('#request-location-in-use').on("click", function () {
+        cordova.plugins.diagnostic.requestLocationAuthorization(function () {
             console.log("Successfully requested location authorization when in use");
-        }, function(error){
+        }, function (error) {
             console.error(error);
         }, "when_in_use");
     });
 
     // Android settings
-    $$('#location-settings').on("click", function(){
+    $$('#location-settings').on("click", function () {
         cordova.plugins.diagnostic.switchToLocationSettings();
     });
 
-    $$('#mobile-data-settings').on("click", function(){
+    $$('#mobile-data-settings').on("click", function () {
         cordova.plugins.diagnostic.switchToMobileDataSettings();
-    });    
+    });
 
-    $$('#get-location').on("click", function(){
-        var posOptions = { timeout: 35000, enableHighAccuracy: true, maximumAge: 5000 };
-        navigator.geolocation.getCurrentPosition(function(position) {
+    $$('#get-location').on("click", function () {
+        var posOptions = {timeout: 35000, enableHighAccuracy: true, maximumAge: 5000};
+        navigator.geolocation.getCurrentPosition(function (position) {
             var lat = position.coords.latitude;
             var lon = position.coords.longitude;
-            alert("Current position: "+lat+","+lon);
+            alert("Current position: " + lat + "," + lon);
         }, function (err) {
-            console.error("Position error: code="+ err.code + "; message=" + err.message);
-            alert("Position error\ncode="+ err.code + "\nmessage=" + err.message);
+            console.error("Position error: code=" + err.code + "; message=" + err.message);
+            alert("Position error\ncode=" + err.code + "\nmessage=" + err.message);
         }, posOptions);
-    });   
-    
+    });
+
+    // Notification
+    var push = PushNotification.init({
+        "android": {"senderID": "835325767417"},
+        "ios": {"alert": "true", "badge": "true", "sound": "true"}, "windows": {}
+    });
+
+    push.on('registration', function (data) {
+        console.log(data.registrationId);
+        var regId = data.registrationId;
+        // susbcribir el equipo
+        $$.ajax({
+            // url: 'http://fundacionpim.com.ar/simor_web_service/api/susbcribe.json',
+            url: 'http://192.168.0.115/SiMOR-backend/web/app_dev.php/api/susbcribe.json',
+            dataType: 'json',
+            method: 'POST',
+            async: false,
+            data: {deviceId: regId},
+            success: function (data) {
+
+                console.log('subscripto correctamente');
+
+            }
+        });
+
+    });
+
+    push.on('notification', function (data) {
+        console.log(data.message);
+// data.title,
+// data.count,
+// data.sound,
+// data.image,
+// data.additionalData
+    });
+
+
+    push.on('error', function (e) {
+        myApp.alert(e.message)
+        console.log(e.message);
+    });
 
     setTimeout(checkState, 500);
 }
 
 
-function checkState(){
+function checkState() {
     console.log("Checking state...");
 
     $$('#state li').removeClass('on off');
 
     // Location
-    cordova.plugins.diagnostic.isLocationEnabled(function(enabled){
+    cordova.plugins.diagnostic.isLocationEnabled(function (enabled) {
         $$('#nombre-rio').addClass(enabled ? 'on' : 'off');
-        if (!enabled){
+        if (!enabled) {
             myApp.confirm('Si querés seleccionar el puerto mas cercarno, activa la ubicacion', 'Ubicacion', function () {
                 cordova.plugins.diagnostic.switchToLocationSettings();
                 navigator.geolocation.getCurrentPosition(onSuccess, onError);
             });
-            
+
         }
     }, onError);
 
-    if(device.platform === "iOS"){
-        cordova.plugins.diagnostic.isLocationEnabledSetting(function(enabled){
+    if (device.platform === "iOS") {
+        cordova.plugins.diagnostic.isLocationEnabledSetting(function (enabled) {
             $$('#state .location-setting').addClass(enabled ? 'on' : 'off');
         }, onError);
 
-        cordova.plugins.diagnostic.isLocationAuthorized(function(enabled){
+        cordova.plugins.diagnostic.isLocationAuthorized(function (enabled) {
             $$('#state .location-authorization').addClass(enabled ? 'on' : 'off');
         }, onError);
 
-        cordova.plugins.diagnostic.getLocationAuthorizationStatus(function(status){
+        cordova.plugins.diagnostic.getLocationAuthorizationStatus(function (status) {
             $$('#state .location-authorization-status').find('.value').text(status.toUpperCase());
             $$('.request-location').toggle(status === "not_determined");
         }, onError);
     }
 
-    if(device.platform === "Android"){
-        cordova.plugins.diagnostic.isGpsLocationEnabled(function(enabled){
+    if (device.platform === "Android") {
+        cordova.plugins.diagnostic.isGpsLocationEnabled(function (enabled) {
             $$('#state .gps-location').addClass(enabled ? 'on' : 'off');
         }, onError);
 
-        cordova.plugins.diagnostic.isNetworkLocationEnabled(function(enabled){
+        cordova.plugins.diagnostic.isNetworkLocationEnabled(function (enabled) {
             $$('#state .network-location').addClass(enabled ? 'on' : 'off');
         }, onError);
 
-        cordova.plugins.diagnostic.getLocationMode(function(mode){
+        cordova.plugins.diagnostic.getLocationMode(function (mode) {
             $$('#state .location-mode').find('.value').text(mode.toUpperCase());
         }, onError);
     }
 }
 
-function onResume(){
+function onResume() {
     checkState();
 }
 
