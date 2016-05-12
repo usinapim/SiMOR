@@ -1,0 +1,60 @@
+<ion-view title="Altura de los ríos" id="page3">
+    <ion-content padding="true" class="has-header">
+        <highchart  id="container" config="chartConfig" style="height: 250px;"></highchart>
+        <label class="item item-input">
+
+            <span class="input-label" aria-label="Input" id="_label-0">
+                Puerto <i class="icon ion-home"></i> 
+            </span>
+            <input type="text" 
+                   ng-model="puerto" 
+                   item-value-key="puerto"
+                   item-view-value-key="puerto"
+                   items-method="getTestItems(query)" 
+                   items-method-value-key="items"
+                   placeholder="Buscar y elegí tu puerto ..."
+                   max-selected-items="1"
+                   cancel-label="Volver" 
+                   items-clicked-method="clickedMethod(callback)"
+                   selected-items-label="Puerto elegido"
+                   select-items-label="Lista de puertos"
+                   ion-autocomplete type="text"  autocomplete="off" />
+        </label>
+
+        <div class="row">
+            <div class="col-50">
+                <div class="list card" ng-show="puertoSelected">
+
+                    <a href="#" class="item item-icon-left">
+                        <i class="icon ion-waterdrop"></i>
+                        {{puertoSelected.rio}}
+                    </a>
+
+                    <a href="#" class="item item-icon-left ">
+                        <i class="icon ion-android-alert"></i>
+                        {{puertoSelected.alerta}}
+                    </a>
+
+
+                </div>
+            </div>
+            <div class="col-50">
+                <div class="list card" ng-show="puertoSelected">
+                    <a href="#" class="item item-icon-left">
+                        <i class="icon ion-ios-speedometer"></i>
+                        {{puertoSelected.ultimo_registro}}
+                    </a>
+                   
+
+                    <a href="#" class="item item-icon-left">
+                        <i class="icon ion-alert"></i>
+                        {{puertoSelected.evacuacion}}
+                    </a>
+
+
+                </div>
+            </div>
+        </div>
+
+    </ion-content>
+</ion-view>
