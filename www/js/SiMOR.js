@@ -6,7 +6,8 @@ var myApp = new Framework7({
     // If it is webapp, we can enable hash navigation:
     pushState: true,
     modalButtonCancel: 'Ahora no',
-    modalButtonOk: 'Si'
+    modalButtonOk: 'Si',
+    swipePanel: 'left',
 });
 
 // Expose Internal DOM library
@@ -17,6 +18,9 @@ var mainView = myApp.addView('.view-main', {});
 // Add another view, which is in right panel
 //var rightView = myApp.addView('.view-right', {
 //});
+
+// Handle Cordova Device Ready Event
+$$(document).on('deviceready', onDeviceReady);
 
 // Show/hide preloader for remote ajax loaded pages
 // Probably should be removed on a production/local app
@@ -41,10 +45,95 @@ myApp.onPageInit('about', function (page) {
     });
 });
 
+// FileStorage
+
+function createFile(nombreArchivo) {
+    var type = window.TEMPORARY;
+    var size = 5 * 1024 * 1024;
+
+    window.requestFileSystem(type, size, successCallback, errorCallback)
+
+    function successCallback(fs) {
+        fs.root.getFile(nombreArchivo, {create: true, exclusive: true}, function (fileEntry) {
+            // myApp.alert('File creation successfull!')
+        }, errorCallback);
+    }
+
+    function errorCallback(error) {
+        myApp.alert("ERROR: " + error.code)
+    }
+
+}
+
+function writeFile(nombreArchivo, datosFile) {
+    var type = window.TEMPORARY;
+    var size = 5 * 1024 * 1024;
+
+    window.requestFileSystem(type, size, successCallback, errorCallback)
+
+    function successCallback(fs) {
+
+        fs.root.getFile(nombreArchivo, {}, function (fileEntry) {
+
+            fileEntry.createWriter(function (fileWriter) {
+                fileWriter.onwriteend = function (e) {
+                    // alert('Write completed.');
+                    console.log('ok');
+                };
+
+                fileWriter.onerror = function (e) {
+                    alert('Write failed: ' + e.toString());
+                };
+
+                var blob = new Blob([datosFile], {type: 'application/json'});
+                fileWriter.write(blob);
+            }, errorCallback);
+
+        }, errorCallback);
+
+    }
+
+    function errorCallback(error) {
+        alert("ERROR: " + error.code)
+    }
+
+}
+
+function readFile(nombreArchivo) {
+    var type = window.TEMPORARY;
+    var size = 5 * 1024 * 1024;
+
+    window.requestFileSystem(type, size, successCallback, errorCallback)
+
+    function successCallback(fs) {
+
+        fs.root.getFile(nombreArchivo, {}, function (fileEntry) {
+
+            fileEntry.file(function (file) {
+                var reader = new FileReader();
+
+                reader.onloadend = function (e) {
+
+                    // var txtArea = document.getElementById('textarea');
+                    // txtArea.value = this.result;
+                };
+
+                reader.readAsText(file);
+
+            }, errorCallback);
+
+        }, errorCallback);
+    }
+
+    function errorCallback(error) {
+        alert("ERROR: " + error.code)
+    }
+
+}
+
 myApp.onPageInit('notificaciones', function (page) {
     $$.ajax({
         url: 'http://fundacionpim.com.ar/simor_web_service/api/tips.json',
-        //url: 'http://192.168.1.104/SiMOR-backend/web/app_dev.php/api/tips.json',
         dataType: 'json',
         async: false,
         success: function (data) {
@@ -98,32 +187,6 @@ if (anchoImagen > 300) {
 
 console.log(anchoImagen);
 $$("#grafico").css('background-size', anchoImagen + 'px 300px');
-
-//var color = {
-//    value: 1,
-//    color: colorGris,
-//    highlight: colorGris
-//};
-//
-//data.push(color);
-//$$("#grafico").html('');
-//
-//    var ctx = document.getElementById("grafico").getContext("2d");
-//
-//
-//        if (myDoughnutChart)
-//            myDoughnutChart.destroy();
-//    
-//     myDoughnutChart = new Chart(ctx).Doughnut(data, {
-//        responsive: false,
-//        tooltipTemplate: "<%if (label){%><%=label%> <%}%>",
-//        percentageInnerCutout: 65,
-//        segmentStrokeColor: "rgba(255, 255, 255, 0)",
-//         animation : false, 
-//        
-//
-//    });
-
 
 function buscarRioByPuerto(puerto) {
     var retorno = 'rio';
@@ -439,34 +502,37 @@ var ubicacion = new Array();
 var datos = new Array();
 var tips = new Array();
 var ubicacionConCoordenada = new Array();
-$$.ajax({
-    url: 'http://fundacionpim.com.ar/simor_web_service/api/niveles.json',
-    //url: 'http://192.168.1.104/SiMOR-backend/web/app_dev.php/api/niveles.json',
-    dataType: 'json',
-    async: false,
-    success: function (data) {
-        $$.each(data.puertos, function (id, dato) {
+var datosNiveles = "";
+myApp.getNiveles = function (callback) {
+
+    $$.ajax({
+        url: 'http://fundacionpim.com.ar/simor_web_service/api/niveles.json',
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+            $$.each(data.puertos, function (id, dato) {
 //            console.log(dato);
-            if (dato.evacuacion != '-' && dato.puerto != 'undefined') {
-                datos.push(dato);
+                datosNiveles = dato;
+                if (dato.evacuacion != '-' && dato.puerto != 'undefined') {
+                    datos.push(dato);
 
-                ubicacion.push(dato.puerto);
-                if (dato.latitud != undefined && dato.longitud != undefined) {
-                    ubicacionConCoordenada.push(dato)
+                    ubicacion.push(dato.puerto);
+                    if (dato.latitud != undefined && dato.longitud != undefined) {
+                        ubicacionConCoordenada.push(dato)
+                    }
                 }
-            }
 
-        });
+            });
 
-        ubicacion.sort();
-    }
-});
-
+            ubicacion.sort();
+        }
+    });
+    if (callback) callback();
+}
 console.log(datos);
 
 $$.ajax({
     url: 'http://fundacionpim.com.ar/simor_web_service/api/tips.json',
-    //url: 'http://192.168.1.104/SiMOR-backend/web/app_dev.php/api/tips.json',
     dataType: 'json',
     async: false,
     success: function (data) {
@@ -481,7 +547,57 @@ $$.ajax({
     }
 });
 
+// Autocomplete
+// set ubicacion para autocomplete
+function setUbicacion(puerto) {
+    $$('#autocomplete-standalone').find('.item-after').text(puerto);
+    // Add item value to input value
+    $$('#autocomplete-standalone').find('input').val(puerto);
 
+    // myApp.alert(value);
+    $$('#nombre-rio').html(buscarRioByPuerto(puerto));
+    buscarMedidaByPuerto(puerto);
+}
+
+var autocompleteDropdownAll = myApp.autocomplete({
+
+    openIn: 'page', //open in page
+    opener: $$('#autocomplete-standalone'), //link that opens autocomplete
+    backOnSelect: true,
+    searchbarPlaceholderText: 'Buscar...',
+    notFoundText: 'No se encontraron lugares',
+    source: function (autocomplete, query, render) {
+
+        var results = [];
+        if (query.length === 0) {
+            render(results);
+            return;
+        }
+        // Find matched items
+        for (var i = 0; i < ubicacion.length; i++) {
+            if (ubicacion[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(ubicacion[i]);
+        }
+        // Render items by passing array with result items
+        render(results);
+    },
+    onOpen: function (autocomplete) {
+        $$('.autocomplete-title').html('');
+    },
+    onChange: function (autocomplete, value) {
+
+        setUbicacion(value);
+
+        // $$('#autocomplete-standalone').find('.item-after').text(value[0]);
+        // // Add item value to input value
+        // $$('#autocomplete-standalone').find('input').val(value[0]);
+        //
+        // // myApp.alert(value);
+        // $$('#nombre-rio').html(buscarRioByPuerto(value));
+        // buscarMedidaByPuerto(value);
+
+    }
+});
+// Ubicacion Picker
 var pickerUbicacion = myApp.picker({
     toolbarCloseText: 'Ver datos',
     input: '#ks-picker-ubicacion',
@@ -501,6 +617,7 @@ var pickerUbicacion = myApp.picker({
         buscarMedidaByPuerto(picker.value);
     }
 });
+
 /** Converts numeric degrees to radians */
 if (typeof (Number.prototype.toRad) === "undefined") {
     Number.prototype.toRad = function () {
@@ -520,7 +637,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
 //    var lat2 = -25.559915;
 //    var lon2 = -53.107878;
 
-    // Latitude/longitude spherical geodesy formulae & scripts (c) Chris Veness 2002-2011                   - www.movable-type.co.uk/scripts/latlong.html 
+    // Latitude/longitude spherical geodesy formulae & scripts (c) Chris Veness 2002-2011                   - www.movable-type.co.uk/scripts/latlong.html
 // where R is earth’s radius (mean radius = 6,371km);
 // note that angles need to be in radians to pass to trig functions!
     var R = 6371; // km
@@ -536,8 +653,9 @@ function getDistance(lat1, lon1, lat2, lon2) {
 
     return d;
 }
+
 //geolocalizacion
-var onSuccess = function (position) {
+var onSuccessGeo = function (position) {
 
     var lat1 = position.coords.latitude;
     var lon1 = position.coords.longitude;
@@ -556,18 +674,12 @@ var onSuccess = function (position) {
     });
     console.log(puerto);
 
-    pickerUbicacion.open()
-    pickerUbicacion.setValue([puerto]);
-    pickerUbicacion.close()
+    // pickerUbicacion.open()
+    // pickerUbicacion.setValue([puerto]);
+    // pickerUbicacion.close()
 
-//    myApp.alert('Latitude: ' + position.coords.latitude + '\n' +
-//            'Longitude: ' + position.coords.longitude + '\n' +
-//            'Altitude: ' + position.coords.altitude + '\n' +
-//            'Accuracy: ' + position.coords.accuracy + '\n' +
-//            'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '\n' +
-//            'Heading: ' + position.coords.heading + '\n' +
-//            'Speed: ' + position.coords.speed + '\n' +
-//            'Timestamp: ' + position.timestamp + '\n');
+    setUbicacion(puerto);
+
 };
 
 // onError Callback receives a PositionError object
@@ -577,7 +689,7 @@ function onError(error) {
         'message: ' + error.message + '\n');
 }
 
-navigator.geolocation.getCurrentPosition(onSuccess, onError);
+navigator.geolocation.getCurrentPosition(onSuccessGeo, onError);
 
 
 //location
@@ -585,15 +697,20 @@ function onDeviceReady() {
 
     $$('body').addClass(device.platform.toLowerCase());
 
+    myApp.getNiveles();
+
+    // createFile('niveles.txt');
+
+    // writeFile('niveles.txt', JSON.stringify(datosNiveles));
+
     // Bind events
     $$(document).on("resume", onResume);
-    $$('#do-check').on("click", checkState);
 
     // Register change listeners for iOS
     if (device.platform === "iOS") {
         cordova.plugins.diagnostic.registerLocationAuthorizationStatusChangeHandler(function (status) {
             console.log("Location authorization status changed to: " + status);
-            checkState();
+            // checkState();
         });
     }
 
@@ -690,9 +807,9 @@ function checkState() {
     cordova.plugins.diagnostic.isLocationEnabled(function (enabled) {
         $$('#nombre-rio').addClass(enabled ? 'on' : 'off');
         if (!enabled) {
-            myApp.confirm('Si querés seleccionar el puerto mas cercarno, activa la ubicacion', 'Ubicacion', function () {
+            myApp.confirm('Si querés seleccionar el puerto mas cercarno, activa la ubicación', 'Ubicacion', function () {
                 cordova.plugins.diagnostic.switchToLocationSettings();
-                navigator.geolocation.getCurrentPosition(onSuccess, onError);
+                navigator.geolocation.getCurrentPosition(onSuccessGeo, onError);
             });
 
         }
@@ -733,4 +850,4 @@ function onResume() {
 }
 
 
-$$(document).on("deviceready", onDeviceReady);
+// $$(document).on("deviceready", onDeviceReady, false);

@@ -13,6 +13,11 @@
     <content src="index.html" />
     <plugin name="cordova-plugin-whitelist" version="1" />
     <preference name="android-build-tool" value="gradle" />
+    <preference name="android-windowSoftInputMode" value="stateVisible|adjustResize" />
+    <preference name="Fullscreen" value="false" />
+    <preference name="AndroidPersistentFileLocation" value="Internal" />
+    <preference name="AndroidPersistentFileLocation" value="Compatibility" />
+    <preference name="AndroidExtraFilesystems" value="files,cache,root" />
     <plugin name="phonegap-plugin-push" source="npm">
         <variable name="SENDER_ID" value="835325767417" />
     </plugin>
