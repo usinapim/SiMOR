@@ -10,7 +10,7 @@ var filestocopy = [{
         "platforms/android/res/raw/ring.mp3"
 }, {
     "resources/ios/sounds/ring.caf":
-        "platforms/ios/YourAppName/ring.caf"
+        "platforms/ios/SiMOR/ring.caf"
 }, ];
 
 var fs = require('fs');

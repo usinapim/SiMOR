@@ -5,7 +5,7 @@ Cordova project
 
 [SiMOR](https://play.google.com/store/apps/details?id=org.pim.simor)
 
-prerequistes:
+Prerequistes:
 - [Cordova 5.4.0](https://cordova.apache.org/)
 - [Android SDK](http://developer.android.com/intl/es/sdk/index.html)
 
@@ -16,19 +16,19 @@ Plattforms:
 
 1. clone proyect:
 
-in project path runs 
-
-```
-$ cordova plattform add android@4.1.1
-```
+    in project path runs 
+    
+    ```
+    $ cordova plattform add android@4.1.1
+    ```
 
 2. in AndroidManifest.xml edit:
 
-```xml
-<uses-sdk android:minSdkVersion="14" android:targetSdkVersion="22" />
-```
+    ```xml
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="22" />
+    ```
 
-cordova plugins list:
+Cordova plugins list:
 
 - cordova-plugin-battery-status 1.1.1-dev "Battery"
 - cordova-plugin-console 1.0.2-dev "Console"
