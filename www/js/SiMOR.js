@@ -45,114 +45,47 @@ myApp.onPageInit('about', function (page) {
     });
 });
 
-// FileStorage
 
-function createFile(nombreArchivo) {
-    var type = window.TEMPORARY;
-    var size = 5 * 1024 * 1024;
+//cuando inicializa la app
+var conectado = false;
+var ubicacion = new Array();
+var datos = new Array();
+var tips = new Array();
+var ubicacionConCoordenada = new Array();
+var datosNiveles = "";
+var fileURL;
+//------------------------------------------//
 
-    window.requestFileSystem(type, size, successCallback, errorCallback)
+myApp.getTips = function (callback) {
 
-    function successCallback(fs) {
-        fs.root.getFile(nombreArchivo, {create: true, exclusive: true}, function (fileEntry) {
-            // myApp.alert('File creation successfull!')
-        }, errorCallback);
+    if (conectado) {
+        $$.ajax({
+            url: 'http://fundacionpim.com.ar/simor_web_service/api/tips.json',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+
+
+                $$.each(data.tips, function (id, dato) {
+                    tips.push(dato);
+                    $$('.swiper-wrapper').append('<div class="swiper-slide"><span>' + dato.descripcion + '</span></div>')
+
+                });
+
+                var mySwiper = myApp.swiper('.swiper-container', {
+                    pagination: '.swiper-pagination',
+                    direction: 'vertical'
+                });
+
+
+            }
+        });
     }
-
-    function errorCallback(error) {
-        myApp.alert("ERROR: " + error.code)
-    }
-
-}
-
-function writeFile(nombreArchivo, datosFile) {
-    var type = window.TEMPORARY;
-    var size = 5 * 1024 * 1024;
-
-    window.requestFileSystem(type, size, successCallback, errorCallback)
-
-    function successCallback(fs) {
-
-        fs.root.getFile(nombreArchivo, {}, function (fileEntry) {
-
-            fileEntry.createWriter(function (fileWriter) {
-                fileWriter.onwriteend = function (e) {
-                    // alert('Write completed.');
-                    console.log('ok');
-                };
-
-                fileWriter.onerror = function (e) {
-                    alert('Write failed: ' + e.toString());
-                };
-
-                var blob = new Blob([datosFile], {type: 'application/json'});
-                fileWriter.write(blob);
-            }, errorCallback);
-
-        }, errorCallback);
-
-    }
-
-    function errorCallback(error) {
-        alert("ERROR: " + error.code)
-    }
-
-}
-
-function readFile(nombreArchivo) {
-    var type = window.TEMPORARY;
-    var size = 5 * 1024 * 1024;
-
-    window.requestFileSystem(type, size, successCallback, errorCallback)
-
-    function successCallback(fs) {
-
-        fs.root.getFile(nombreArchivo, {}, function (fileEntry) {
-
-            fileEntry.file(function (file) {
-                var reader = new FileReader();
-
-                reader.onloadend = function (e) {
-
-                    // var txtArea = document.getElementById('textarea');
-                    // txtArea.value = this.result;
-                };
-
-                reader.readAsText(file);
-
-            }, errorCallback);
-
-        }, errorCallback);
-    }
-
-    function errorCallback(error) {
-        alert("ERROR: " + error.code)
-    }
-
 }
 
 myApp.onPageInit('notificaciones', function (page) {
-    $$.ajax({
-        url: 'http://fundacionpim.com.ar/simor_web_service/api/tips.json',
-        dataType: 'json',
-        async: false,
-        success: function (data) {
-
-
-            $$.each(data.tips, function (id, dato) {
-                tips.push(dato);
-                $$('.swiper-wrapper').append('<div class="swiper-slide"><span>' + dato.descripcion + '</span></div>')
-
-            });
-
-            var mySwiper = myApp.swiper('.swiper-container', {
-                pagination: '.swiper-pagination',
-                direction: 'vertical'
-            });
-
-
-        }
-    });
+//hidrata el autocomplete
+    myApp.getTips();
 });
 
 
@@ -497,21 +430,17 @@ function controlNivelColor(variacion) {
     return color;
 }
 
-//cuando inicializa la app
-var ubicacion = new Array();
-var datos = new Array();
-var tips = new Array();
-var ubicacionConCoordenada = new Array();
-var datosNiveles = "";
+
 myApp.getNiveles = function (callback) {
 
     $$.ajax({
-        url: 'http://fundacionpim.com.ar/simor_web_service/api/niveles.json',
+        url: cordova.file.dataDirectory + "niveles.json",
+        // url: 'http://fundacionpim.com.ar/simor_web_service/api/niveles.json',
         dataType: 'json',
         async: false,
         success: function (data) {
             $$.each(data.puertos, function (id, dato) {
-//            console.log(dato);
+
                 datosNiveles = dato;
                 if (dato.evacuacion != '-' && dato.puerto != 'undefined') {
                     datos.push(dato);
@@ -525,27 +454,32 @@ myApp.getNiveles = function (callback) {
             });
 
             ubicacion.sort();
+            datosNiveles = data;
         }
+
     });
     if (callback) callback();
 }
 console.log(datos);
 
-$$.ajax({
-    url: 'http://fundacionpim.com.ar/simor_web_service/api/tips.json',
-    dataType: 'json',
-    async: false,
-    success: function (data) {
-        console.log(data.tips.length);
-        if (data.tips.length > 0) {
-            myApp.confirm('Tenés notificaciones. Querés verlas?', 'Notificaciones y tips', function () {
-                mainView.router.loadPage('notificaciones.html');
-            });
+
+myApp.checkTips = function (callback) {
+    $$.ajax({
+        url: 'http://fundacionpim.com.ar/simor_web_service/api/tips.json',
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+            console.log(data.tips.length);
+            if (data.tips.length > 0) {
+                myApp.confirm('Tenés notificaciones. Querés verlas?', 'Notificaciones y tips', function () {
+                    mainView.router.loadPage('notificaciones.html');
+                });
+            }
+
+
         }
-
-
-    }
-});
+    });
+}
 
 // Autocomplete
 // set ubicacion para autocomplete
@@ -697,11 +631,29 @@ function onDeviceReady() {
 
     $$('body').addClass(device.platform.toLowerCase());
 
+    var networkState = navigator.connection.type;
+    if (networkState === Connection.NONE) {//si no esta conectado a internet
+        myApp.alert('No Estas conectado a internet :(');
+        conectado = false;
+    } else {
+        conectado = true;
+    }
+
+    if (conectado) {
+        myApp.checkTips();
+    }
+
+    //chequea si existe el archivo
+    checkIfFileExists("niveles.json");
+
+    //hidrata el autocomplete
     myApp.getNiveles();
 
-    // createFile('niveles.txt');
 
-    // writeFile('niveles.txt', JSON.stringify(datosNiveles));
+//crea la BD
+    var db = sqlitePlugin.openDatabase({name: dbName, location: 'default'});
+    db.transaction(populateDB, errorCB, successCB);
+
 
     // Bind events
     $$(document).on("resume", onResume);
@@ -790,7 +742,7 @@ function onDeviceReady() {
 
 
     push.on('error', function (e) {
-        myApp.alert(e.message)
+        myApp.alert('Servicio de Notificaciones no disponible');
         console.log(e.message);
     });
 
@@ -848,6 +800,3 @@ function checkState() {
 function onResume() {
     checkState();
 }
-
-
-// $$(document).on("deviceready", onDeviceReady, false);
