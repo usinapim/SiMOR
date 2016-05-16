@@ -434,8 +434,8 @@ function controlNivelColor(variacion) {
 myApp.getNiveles = function (callback) {
 
     $$.ajax({
-        url: cordova.file.dataDirectory + "niveles.json",
-        // url: 'http://fundacionpim.com.ar/simor_web_service/api/niveles.json',
+        // url: cordova.file.dataDirectory + "niveles.json",
+        url: 'http://fundacionpim.com.ar/simor_web_service/api/niveles.json',
         dataType: 'json',
         async: false,
         success: function (data) {
@@ -643,8 +643,6 @@ function onDeviceReady() {
         myApp.checkTips();
     }
 
-    //chequea si existe el archivo
-    checkIfFileExists("niveles.json");
 
     //hidrata el autocomplete
     myApp.getNiveles();
