@@ -531,26 +531,7 @@ var autocompleteDropdownAll = myApp.autocomplete({
 
     }
 });
-// Ubicacion Picker
-var pickerUbicacion = myApp.picker({
-    toolbarCloseText: 'Ver datos',
-    input: '#ks-picker-ubicacion',
-    cols: [
-        {
-            textAlign: 'center',
-            values: ubicacion,
-            onClose: function (picker, ubicacionSel) {
-                myApp.alert(ubicacionSel);
-            }
-        }
-    ],
-    onClose: function (picker) {
-//        console.log(picker);    
 
-        $$('#nombre-rio').html(buscarRioByPuerto(picker.value));
-        buscarMedidaByPuerto(picker.value);
-    }
-});
 
 /** Converts numeric degrees to radians */
 if (typeof (Number.prototype.toRad) === "undefined") {
