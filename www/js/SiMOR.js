@@ -648,10 +648,6 @@ function onDeviceReady() {
     myApp.getNiveles();
 
 
-//crea la BD
-    var db = sqlitePlugin.openDatabase({name: dbName, location: 'default'});
-    db.transaction(populateDB, errorCB, successCB);
-
 
     // Bind events
     $$(document).on("resume", onResume);
