@@ -19,7 +19,7 @@ Plattforms:
 in project path runs 
 
 ```
-$ cordova plattform add android@4.1.1
+$ cordova platform add android@4.1.1
 ```
 
 2. in AndroidManifest.xml edit:
