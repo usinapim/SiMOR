@@ -6,9 +6,9 @@
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
 
-servidor = 'http://fundacionpim.com.ar/';
 
-angular.module('app', ['ionic', 'highcharts-ng', 'app.controllers', 'app.routes', 'app.services', 'app.directives', 'ion-autocomplete'])
+
+var app = angular.module('app', ['ionic', 'highcharts-ng', 'app.routes', 'app.controllers',  'app.services', 'app.directives', 'ion-autocomplete', 'blockUI'])
 
         .run(function ($ionicPlatform, $http, $rootScope) {
             $ionicPlatform.ready(function () {
@@ -22,6 +22,19 @@ angular.module('app', ['ionic', 'highcharts-ng', 'app.controllers', 'app.routes'
                     // org.apache.cordova.statusbar required
                     StatusBar.styleDefault();
                 }
+
+                $rootScope.showToast = function (texto) {
+                    window.plugins.toast.showWithOptions(
+                            {
+                                message: texto,
+                                duration: "short", // which is 2000 ms. "long" is 4000. Or specify the nr of ms yourself. 
+                                position: "bottom",
+                                addPixelsY: -40  // added a negative value to move it up a bit (default 0) 
+                            }
+
+                    );
+                };
+
                 var puertos = [];
                 var ubicacion = [];
                 var ubicacionConCoordenada = [];
@@ -46,12 +59,20 @@ angular.module('app', ['ionic', 'highcharts-ng', 'app.controllers', 'app.routes'
                             $rootScope.puertos = puertos;
                             $rootScope.ubicacion = ubicacion;
                             $rootScope.ubicacionConCoordenada = ubicacionConCoordenada;
-
-
-
+                            console.log(ubicacionConCoordenada);
                         });
 
 
-                
+
             });
         });
+
+
+
+/*Funciones globales*/
+
+
+
+function isUndefined(data) {
+    return (typeof data === 'undefined');
+}

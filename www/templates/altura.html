@@ -21,34 +21,34 @@
                    ion-autocomplete type="text"  autocomplete="off" />
         </label>
 
-        <div class="row">
+        <div class="row" ng-show="puertoSelected">
             <div class="col-50">
-                <div class="list card" ng-show="puertoSelected">
+                <div class="list card" >
 
-                    <a href="#" class="item item-icon-left">
+                    <a on-touch="showToast('Río: '+puertoSelected.rio)"  class="item item-icon-left" style="color: {{colorNormal}};" title="Rio">
                         <i class="icon ion-waterdrop"></i>
                         {{puertoSelected.rio}}
                     </a>
 
-                    <a href="#" class="item item-icon-left ">
+                    <a on-touch="showToast('Nivel de alerta en metros')" href="#" class="item item-icon-left" style="color: {{colorAlerta}};">
                         <i class="icon ion-android-alert"></i>
-                        {{puertoSelected.alerta}}
+                        {{puertoSelected.alerta}} mts
                     </a>
 
 
                 </div>
             </div>
             <div class="col-50">
-                <div class="list card" ng-show="puertoSelected">
-                    <a href="#" class="item item-icon-left">
-                        <i class="icon ion-ios-speedometer"></i>
-                        {{puertoSelected.ultimo_registro}}
+                <div class="list card"  >
+                    <a on-touch="showToast('Variación en metros')" href="#" class="item item-icon-left" style="color: {{variacion.color}};">
+                        <i class="{{variacion.icono}}"></i>
+                        {{variacion.variacion}} mts
                     </a>
                    
 
-                    <a href="#" class="item item-icon-left">
+                    <a on-touch="showToast('Nivel de evacuación en metros')" href="#" class="item item-icon-left" style="color: {{colorEvacuacion}};">
                         <i class="icon ion-alert"></i>
-                        {{puertoSelected.evacuacion}}
+                        {{puertoSelected.evacuacion}} mts
                     </a>
 
 

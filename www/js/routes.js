@@ -10,32 +10,32 @@ angular.module('app.routes', [])
     
   
 
-      .state('tabsController.cameraTabDefaultPage', {
+      .state('tabsController.notificaciones', {
     url: '/page2',
     views: {
       'tab1': {
-        templateUrl: 'templates/cameraTabDefaultPage.html',
-        controller: 'cameraTabDefaultPageCtrl'
+        templateUrl: 'templates/notificaciones.html',
+        controller: 'notificacionesCont'
       }
     }
   })
 
-  .state('tabsController.cartTabDefaultPage', {
+  .state('tabsController.altura', {
     url: '/page3',
     views: {
       'tab2': {
-        templateUrl: 'templates/cartTabDefaultPage.html',
-        controller: 'cartTabDefaultPageCtrl'
+        templateUrl: 'templates/altura.html',
+        controller: 'alturaCont'
       }
     }
   })
 
-  .state('tabsController.cloudTabDefaultPage', {
+  .state('tabsController.mapa', {
     url: '/page4',
     views: {
       'tab3': {
-        templateUrl: 'templates/cloudTabDefaultPage.html',
-        controller: 'cloudTabDefaultPageCtrl'
+        templateUrl: 'templates/mapa.html',
+        controller: 'mapaCont'
       }
     }
   })
@@ -50,9 +50,9 @@ angular.module('app.routes', [])
     url: '/side-menu22',
     templateUrl: 'templates/menu2.html',
     abstract:true
-  })
+  });
 
-$urlRouterProvider.otherwise('/page1/page2')
+$urlRouterProvider.otherwise('/page1/page3');
 
   
 

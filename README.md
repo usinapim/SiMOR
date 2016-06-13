@@ -42,7 +42,7 @@ cordova plugins list:
 - cordova-plugin-whitelist 1.2.1 "Whitelist"
 - cordova.plugins.diagnostic.api-22 2.3.10-api-22 "Diagnostic"
 - phonegap-plugin-push 1.6.3 "PushPlugin"
-
+- cordova-plugin-x-toast 2.5.1 "PhoneGap Toast plugin"
 
 ```
 $ cordova emulate android
