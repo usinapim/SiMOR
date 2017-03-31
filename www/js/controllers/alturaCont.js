@@ -11,7 +11,7 @@ app.controller('alturaCont', function ($scope, $rootScope, $filter) {
         options: {
             chart: {
                 type: 'gauge',
-                plotBackgroundColor: null,
+                plotBackgroundColor: colorPrincipal,
                 plotBackgroundImage: null,
                 plotBorderWidth: 0,
                 plotShadow: false
@@ -20,41 +20,79 @@ app.controller('alturaCont', function ($scope, $rootScope, $filter) {
                 startAngle: -150,
                 endAngle: 150,
                 background: [{
-                        backgroundColor: {
-                            linearGradient: {x1: 0, y1: 0, x2: 0, y2: 1},
-                            stops: [
-                                [0, '#FFF'],
-                                [1, '#333']
-                            ]
-                        },
-                        borderWidth: 0,
-                        outerRadius: '109%'
-                    }, {
-                        backgroundColor: {
-                            linearGradient: {x1: 0, y1: 0, x2: 0, y2: 1},
-                            stops: [
-                                [0, '#333'],
-                                [1, '#FFF']
-                            ]
-                        },
-                        borderWidth: 1,
-                        outerRadius: '107%'
-                    }, {
-                        // default background
-                    }, {
-                        backgroundColor: '#DDD',
-                        borderWidth: 0,
-                        outerRadius: '105%',
-                        innerRadius: '103%'
-                    }]
+                    backgroundColor: {
+                        linearGradient: {x1: 0, y1: 0, x2: 0, y2: 1},
+                        stops: [
+                            [0, '#FFF'],
+                            [1, '#333']
+                        ]
+                    },
+                    borderWidth: 0,
+                    outerRadius: '109%'
+                }, {
+                    backgroundColor: {
+                        linearGradient: {x1: 0, y1: 0, x2: 0, y2: 1},
+                        stops: [
+                            [0, '#333'],
+                            [1, '#FFF']
+                        ]
+                    },
+                    borderWidth: 1,
+                    outerRadius: '107%'
+                }, {
+                    // default background
+                }, {
+                    backgroundColor: '#DDD',
+                    borderWidth: 0,
+                    outerRadius: '105%',
+                    innerRadius: '103%'
+                }]
             },
         },
         title: 'Medidor de alturas',
-        yAxis: getYAxes(),
+        yAxis: {
+            min: 0,
+            max: 200,
+            minorTickInterval: 'auto',
+            minorTickWidth: 1,
+            minorTickLength: 10,
+            minorTickPosition: 'inside',
+            minorTickColor: '#666',
+            tickPixelInterval: 30,
+            tickWidth: 1,
+            tickPosition: 'inside',
+            tickLength: 10,
+            tickColor: '#666',
+            labels: {
+                step: 2,
+                rotation: 'auto'
+            },
+            title: {
+                text: 'mts'
+            },
+            plotBands: [{
+                id: 'normal',
+                from: 0,
+                to: 100,
+                color: colorNormal
+//                            color: '#55BF3B' // green
+            }, {
+                id: 'alerta',
+                from: 100,
+                to: 150,
+                color: colorAlerta
+                //color: '#DDDF0D'  yellow
+            }, {
+                id: 'evacuacion',
+                from: 150,
+                to: 200,
+                color: colorEvacuacion
+                //color: '#DF5353'  red
+            }]
+        },
         series: getSeries(),
         loading: false
     };
-
 
     $scope.getTestItems = function (query) {
         if (query) {
@@ -70,10 +108,41 @@ app.controller('alturaCont', function ($scope, $rootScope, $filter) {
 
         $scope.chartConfig.series = getSeries($scope.puertoSelected.ultimo_registro);
 
-        $scope.chartConfig.yAxis = getYAxes($scope.puertoSelected);
-        
-        $scope.variacion = getVariacion($scope.puertoSelected.variacion);
+        var max = 20;
+        var alerta = 10;
+        var evacuacion = 15;
 
+        if (!isUndefined($scope.puertoSelected)) {
+            if ($scope.puertoSelected.evacuacion && parseFloat($scope.puertoSelected.evacuacion) > 0) {
+                max = parseFloat($scope.puertoSelected.evacuacion) * 1.2;
+                evacuacion = parseFloat($scope.puertoSelected.evacuacion);
+            }
+
+            if ($scope.puertoSelected.alerta && parseFloat($scope.puertoSelected.alerta) > 0) {
+                alerta = parseFloat($scope.puertoSelected.alerta);
+            }
+
+        }
+
+        var chart = $scope.chartConfig.getHighcharts();
+
+        chart.yAxis[0].removePlotBand('normal');
+        chart.yAxis[0].removePlotBand('alerta');
+        chart.yAxis[0].removePlotBand('evacuacion');
+
+        chart.yAxis[0].setExtremes(0, max)
+
+        chart.yAxis[0].addPlotBand(
+            {id: "normal", from: 0, to: alerta, color: colorNormal}
+        );
+        chart.yAxis[0].addPlotBand(
+            {id: "alerta", from: alerta, to: evacuacion, color: colorAlerta}
+        );
+        chart.yAxis[0].addPlotBand(
+            {id: "evacuacion", from: evacuacion, to: max, color: colorEvacuacion}
+        );
+
+        $scope.variacion = getVariacion($scope.puertoSelected.variacion);
 
         // print out the selected item
         //console.log(callback.item);
@@ -86,7 +155,6 @@ app.controller('alturaCont', function ($scope, $rootScope, $filter) {
     };
 
 
-
 });
 
 function getSeries(data) {
@@ -94,90 +162,34 @@ function getSeries(data) {
         data = 0;
     }
     var series = [{
-            name: 'Altura del río',
-            data: [parseFloat(data)],
-            dataLabels: {
-                formatter: function () {
-                    var mts = this.y;
-                    return '<span style="color:#000">' + mts + ' mts</span><br/>';
-                },
-                backgroundColor: {
-                    linearGradient: {
-                        x1: 0,
-                        y1: 0,
-                        x2: 0,
-                        y2: 1
-                    },
-                    stops: [
-                        [0, '#DDD'],
-                        [1, '#FFF']
-                    ]
-                }
+        name: 'Altura del río',
+        data: [parseFloat(data)],
+        dataLabels: {
+            formatter: function () {
+                var mts = this.y;
+                return '<span style="color:#fff">' + mts + ' mts</span><br/>';
             },
-            tooltip: {
-                valueSuffix: ' mts'
+            backgroundColor: {
+                linearGradient: {
+                    x1: 0,
+                    y1: 0,
+                    x2: 0,
+                    y2: 1
+                },
+                stops: [
+                    [0, '#DDD'],
+                    [1, '#FFF']
+                ]
             }
-        }];
+        },
+        tooltip: {
+            valueSuffix: ' mts'
+        }
+    }];
 
     return series;
 }
 
-function getYAxes(unPuerto) {
-    var min = 0;
-    var max = 20;
-    var alerta = 10;
-    var evacuacion = 15;
-    if (!isUndefined(unPuerto)) {
-        if (unPuerto.evacuacion && parseFloat(unPuerto.evacuacion) > 0) {
-            max = parseFloat(unPuerto.evacuacion) * 1.2;
-            evacuacion = parseFloat(unPuerto.evacuacion);
-        }
-
-        if (unPuerto.alerta && parseFloat(unPuerto.alerta) > 0) {
-            alerta = parseFloat(unPuerto.alerta);
-        }
-
-    }
-    var axes = {
-        min: min,
-        max: max,
-        minorTickInterval: 'auto',
-        minorTickWidth: 1,
-        minorTickLength: 10,
-        minorTickPosition: 'inside',
-        minorTickColor: '#666',
-        tickPixelInterval: 30,
-        tickWidth: 1,
-        tickPosition: 'inside',
-        tickLength: 10,
-        tickColor: '#666',
-        labels: {
-            step: 2,
-            rotation: 'auto'
-        },
-        title: {
-            text: 'mts'
-        },
-        plotBands: [{
-                from: min,
-                to: alerta,
-                color: colorNormal
-//                            color: '#55BF3B' // green
-            }, {
-                from: alerta,
-                to: evacuacion,
-                color: colorAlerta
-                        //color: '#DDDF0D'  yellow
-            }, {
-                from: evacuacion,
-                to: max,
-                color: colorEvacuacion
-                        //color: '#DF5353'  red
-            }]
-    };
-
-    return axes;
-}
 
 function getVariacion(variacion) {
     variacion = parseFloat(variacion);
@@ -202,6 +214,6 @@ function getVariacion(variacion) {
             color: colorBajaNivel
         };
     }
-    
+
     return retorno;
 }

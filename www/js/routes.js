@@ -46,11 +46,11 @@ angular.module('app.routes', [])
     abstract:true
   })
 
-  .state('menu2', {
-    url: '/side-menu22',
-    templateUrl: 'templates/menu2.html',
-    abstract:true
-  });
+  .state('acerca-de', {
+    url: '/acerca-de',
+    templateUrl: 'templates/acerca-de.html',
+  })
+
 
 $urlRouterProvider.otherwise('/page1/page3');
 

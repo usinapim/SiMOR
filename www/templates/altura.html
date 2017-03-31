@@ -1,36 +1,40 @@
 <ion-view title="Altura de los ríos" id="page3">
     <ion-content padding="true" class="has-header">
-        <highchart  id="container" config="chartConfig" style="height: 250px;"></highchart>
-        <label class="item item-input">
+        <highchart id="container" config="chartConfig" style="height: 350px;"></highchart>
+        <div class="row">
+            <label class="item item-input" style="width: 100%;">
 
             <span class="input-label" aria-label="Input" id="_label-0">
                 Puerto <i class="icon ion-home"></i> 
             </span>
-            <input type="text" 
-                   ng-model="puerto" 
-                   item-value-key="puerto"
-                   item-view-value-key="puerto"
-                   items-method="getTestItems(query)" 
-                   items-method-value-key="items"
-                   placeholder="Buscar y elegí tu puerto ..."
-                   max-selected-items="1"
-                   cancel-label="Volver" 
-                   items-clicked-method="clickedMethod(callback)"
-                   selected-items-label="Puerto elegido"
-                   select-items-label="Lista de puertos"
-                   ion-autocomplete type="text"  autocomplete="off" />
-        </label>
+                <input type="text"
+                       ng-model="puerto"
+                       item-value-key="puerto"
+                       item-view-value-key="puerto"
+                       items-method="getTestItems(query)"
+                       items-method-value-key="items"
+                       placeholder="Buscar y elegí tu puerto ..."
+                       max-selected-items="1"
+                       cancel-label="Volver"
+                       items-clicked-method="clickedMethod(callback)"
+                       selected-items-label="Puerto elegido"
+                       select-items-label="Lista de puertos"
+                       ion-autocomplete type="text" autocomplete="off"/>
+            </label>
+        </div>
 
         <div class="row" ng-show="puertoSelected">
             <div class="col-50">
-                <div class="list card" >
+                <div class="list card">
 
-                    <a on-touch="showToast('Río: '+puertoSelected.rio)"  class="item item-icon-left" style="color: {{colorNormal}};" title="Rio">
+                    <a on-touch="showToast('Río: '+puertoSelected.rio)" class="item item-icon-left"
+                       style="color: {{colorNormal}};" title="Rio">
                         <i class="icon ion-waterdrop"></i>
                         {{puertoSelected.rio}}
                     </a>
 
-                    <a on-touch="showToast('Nivel de alerta en metros')" href="#" class="item item-icon-left" style="color: {{colorAlerta}};">
+                    <a on-touch="showToast('Nivel de alerta en metros')" href="#" class="item item-icon-left"
+                       style="color: {{colorAlerta}};">
                         <i class="icon ion-android-alert"></i>
                         {{puertoSelected.alerta}} mts
                     </a>
@@ -39,14 +43,16 @@
                 </div>
             </div>
             <div class="col-50">
-                <div class="list card"  >
-                    <a on-touch="showToast('Variación en metros')" href="#" class="item item-icon-left" style="color: {{variacion.color}};">
+                <div class="list card">
+                    <a on-touch="showToast('Variación en metros')" href="#" class="item item-icon-left"
+                       style="color: {{variacion.color}};">
                         <i class="{{variacion.icono}}"></i>
                         {{variacion.variacion}} mts
                     </a>
-                   
 
-                    <a on-touch="showToast('Nivel de evacuación en metros')" href="#" class="item item-icon-left" style="color: {{colorEvacuacion}};">
+
+                    <a on-touch="showToast('Nivel de evacuación en metros')" href="#" class="item item-icon-left"
+                       style="color: {{colorEvacuacion}};">
                         <i class="icon ion-alert"></i>
                         {{puertoSelected.evacuacion}} mts
                     </a>
