@@ -1,0 +1,25 @@
+img {
+    width: 100%;
+    height: auto;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+}
+
+.menu .item {
+    background-color: transparent;
+    color: #fff;
+}
+
+.highcharts-container {
+    width: 100% !important;
+}
+
+rect {
+    fill: #393939;
+}

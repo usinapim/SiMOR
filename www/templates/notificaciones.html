@@ -1,0 +1,16 @@
+<ion-view title="Notificaciones" id="page2">
+    <ion-content padding="true" class="has-header">
+        <label class="item item-input">
+            <i class="icon ion-search placeholder-icon"></i>
+            <input type="search" placeholder="Busca una notificacion">
+        </label>
+        <ion-list>
+            <ion-item ng-repeat="n in tips" ng-click="openModal(n)">
+                {{n.descripcion}}
+            </ion-item>
+        </ion-list>
+
+
+
+    </ion-content>
+</ion-view>
