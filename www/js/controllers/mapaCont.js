@@ -2,17 +2,17 @@ app.controller('mapaCont', function ($scope, $rootScope, $http, $compile) {
 
     $scope.initMap = function (myLatLng) {
         var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 10,
+            zoom: 7,
             center: myLatLng
         });
 
 
 //        $scope.busqueda.mapa = true;
         angular.forEach($rootScope.ubicacionConCoordenada, function (puerto, id) {
-            
+
             var variacion = getVariacion(puerto.variacion);
-            
-            var compiled = $compile("<div style='text-align:left;'>" + puerto.rio + '<br><strong>' + puerto.puerto + ' <div style="color: '+variacion.color+';"><i class="'+variacion.icono+'"></i> '+variacion.variacion+' mts</div>'+ "</div>")($scope);
+
+            var compiled = $compile("<div style='text-align:left;'>" + puerto.rio + '<br><strong>' + puerto.puerto + ' <div style="color: ' + variacion.color + ';"><i class="' + variacion.icono + '"></i> ' + variacion.variacion + ' mts</div>' + ' <div style="color: ' + colorNormal + ';"><i class="icon ion-waterdrop"></i> ' + puerto.ultimo_registro + ' mts</div>' + "</div>")($scope);
             var infowindow = new google.maps.InfoWindow({
                 content: compiled[0],
                 maxWidth: 200
@@ -38,6 +38,6 @@ app.controller('mapaCont', function ($scope, $rootScope, $http, $compile) {
             });
         });
     };
-    
+
     $scope.initMap({lat: -27.106337, lng: -55.522285});
 });

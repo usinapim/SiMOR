@@ -8,7 +8,7 @@
 
 
 
-var app = angular.module('app', ['ionic', 'highcharts-ng', 'app.routes', 'app.controllers',  'app.services', 'app.directives', 'ion-autocomplete', 'blockUI'])
+var app = angular.module('app', ['ionic', 'highcharts-ng', 'app.routes', 'app.controllers', 'app.services', 'app.directives', 'ion-autocomplete', 'blockUI'])
 
         .run(function ($ionicPlatform, $http, $rootScope) {
             $ionicPlatform.ready(function () {
@@ -22,6 +22,47 @@ var app = angular.module('app', ['ionic', 'highcharts-ng', 'app.routes', 'app.co
                     // org.apache.cordova.statusbar required
                     StatusBar.styleDefault();
                 }
+
+                var push = PushNotification.init({
+                    "android": {"senderID": "835325767417"},
+                    "ios": {"alert": "true", "badge": "true", "sound": "true"}, "windows": {}
+                });
+
+                push.on('registration', function (data) {
+                    console.log(data.registrationId);
+                    var regId = data.registrationId;
+                    // susbcribir el equipo
+                   $http({
+                        // url: 'http://fundacionpim.com.ar/simor_web_service/api/susbcribe.json',
+                        url: 'https://fundacionpim.com.ar/simor_web_service/api/susbcribe.json',
+                        dataType: 'json',
+                        method: 'POST',
+                        async: false,
+                        data: {deviceId: regId},
+                        success: function (data) {
+
+                            console.log('subscripto correctamente');
+
+                        }
+                    });
+
+                });
+
+                push.on('notification', function (data) {
+                    console.log(data.message);
+// data.title,
+// data.count,
+// data.sound,
+// data.image,
+// data.additionalData
+                });
+
+
+                push.on('error', function (e) {
+                    myApp.alert('Servicio de Notificaciones no disponible');
+                    console.log(e.message);
+                });
+
 
                 $rootScope.showToast = function (texto) {
                     window.plugins.toast.showWithOptions(
