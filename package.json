@@ -1,8 +1,8 @@
 {
-  "name": "simor2",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "http://ionicframework.com/",
+  "name": "simor3",
+  "version": "3.0.0",
+  "author": "usinaPIM",
+  "homepage": "https://fundacionpim.com.ar",
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",

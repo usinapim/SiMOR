@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>MyApp</name>
-    <description>An awesome Ionic/Cordova app.</description>
-    <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
+<widget id="org.pim.simor" version="3.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>SiMOR</name>
+    <description>El Sistema Movil para la Observación de Rio (SiMOR) tiene como propósito
+        proveer información útil y certera, de fácil acceso y lectura que pudiera
+        servir para alertar a la población sobre el nivel de los ríos en las zonas
+        costeras de las Provincias de Misiones y Corrientes.</description>
+    <author email="usinapim@gmail.com" href="https://fundacionpim.com.ar">
+        usinaPIM
+    </author>
     <content src="index.html"/>
     <access origin="*"/>
     <allow-navigation href="http://ionic.local/*"/>
