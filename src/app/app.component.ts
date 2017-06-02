@@ -56,15 +56,50 @@ export class MyApp {
 
   cargarRios() {
     this.presentLoading();
-    this.apiProvider.getAll('niveles')
-      .then(
-      (data) => {
-        console.log(data);
-        this.storage.set('niveles', data);
-        this.dismissLoading();
+
+    let today = new Date();
+    let dd: any = today.getDate();
+    let mm: any = today.getMonth() + 1; //January is 0!
+
+    let yyyy = today.getFullYear();
+    if (dd < 10) {
+      dd = '0' + dd;
+    }
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+    let hoy = dd + '/' + mm + '/' + yyyy;
+
+    this.storage.get('niveles').then(
+      (val) => {
+        console.log(val);
+        if (!val || val.fecha !== hoy) {
+          this.apiProvider.getAll('niveles')
+            .then(
+            (data) => {
+              let toStore = {
+                niveles: data,
+                fecha: hoy
+              }
+              // si cambia el dia elimina el registro viejo
+              // y crea uno nuevo  
+              this.storage.clear().then(
+                () => {
+                  this.storage.set('niveles', toStore);
+                  this.dismissLoading();
+                }
+              )
+            },
+            err => this.handleError.bind(this)
+            );
+        } else {
+          this.dismissLoading();
+        }
       },
-      err => this.handleError.bind(this)
-      );
+      (err) => {
+        console.error('err', err)
+      });
+
   }
 
   // to base class

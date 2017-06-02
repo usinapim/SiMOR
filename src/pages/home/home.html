@@ -6,6 +6,21 @@
     <ion-title>Home</ion-title>
   </ion-navbar>
 </ion-header>-->
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+    <ion-title>
+      <img class="simor-logo" src="assets/img/SiMORA.png" />
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only *ngIf="puertoSelect" (click)="share()">
+        <ion-icon name="share"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
 
 <ion-content>
 
@@ -52,6 +67,11 @@
         <ion-icon item-start name="information" [ngStyle]="{'color': colorEvacuacion}"></ion-icon>
         <ion-label item-end [ngStyle]="{'color': colorEvacuacion}">{{puertoSelect?.evacuacion}} mts</ion-label>
       </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf="fechaDatos">
+    <ion-col text-right>
+      Fecha de los datos: {{fechaDatos}}
     </ion-col>
   </ion-row>
 

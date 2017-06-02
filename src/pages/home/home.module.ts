@@ -1,10 +1,9 @@
 import { HomePage } from './home';
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-
 import { ChartModule } from 'angular2-highcharts';
 
-declare var require: any
+declare var require: any;
 
 @NgModule({
   declarations: [
@@ -13,7 +12,7 @@ declare var require: any
   imports: [
     ChartModule.forRoot(
       require('highcharts'),
-      require('highcharts/highcharts-more'),
+      require('highcharts/highcharts-more')
     ),
     IonicPageModule.forChild(HomePage),
   ],

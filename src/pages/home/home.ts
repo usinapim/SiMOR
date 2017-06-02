@@ -2,6 +2,8 @@ import { Storage } from '@ionic/storage';
 import { SeleccionarPuertosPage } from './../seleccionar-puertos/seleccionar-puertos';
 import { Component } from '@angular/core';
 import { NavController, ModalController, LoadingController } from 'ionic-angular';
+import { SocialSharing } from '@ionic-native/social-sharing';
+import { Screenshot } from '@ionic-native/screenshot';
 
 @Component({
   selector: 'page-home',
@@ -10,6 +12,8 @@ import { NavController, ModalController, LoadingController } from 'ionic-angular
 export class HomePage {
 
   loader: any;
+  fechaDatos: any;
+
   options: Object;
   chart: any;
   saveInstance(chartInstance) {
@@ -33,7 +37,10 @@ export class HomePage {
   constructor(public navCtrl: NavController,
     public modalCtrl: ModalController,
     public loadingCtrl: LoadingController,
-    public storage: Storage) {
+    public storage: Storage,
+    private socialSharing: SocialSharing,
+    private screenshot: Screenshot) {
+
     this.options = {
       chart: {
         type: 'gauge',
@@ -238,8 +245,8 @@ export class HomePage {
     this.presentLoading();
     this.storage.get('niveles').then(
       (val) => {
-        console.log('niveles', val);
-        let modal = this.modalCtrl.create(SeleccionarPuertosPage, { "niveles": val });
+        this.fechaDatos = val.fecha;
+        let modal = this.modalCtrl.create(SeleccionarPuertosPage, { "niveles": val.niveles });
         modal.onDidDismiss(data => {
           if (data) {
             this.puertoSelect = data.puerto;
@@ -251,6 +258,23 @@ export class HomePage {
         this.dismissLoading();
         modal.present();
       });
+  }
+
+  share() {
+    this.screenshot.URI(80).then(
+      (data) => {
+        this.socialSharing.share('simor data', 'asunto', data.URI, 'https://play.google.com/store/apps/details?id=org.pim.simor').then(() => {
+          // Sharing via email is possible
+          console.log('shared');
+        }).catch(() => {
+          // Sharing via email is not possible
+          console.error('error sharing');
+        });
+      }
+      , (err) => {
+        console.error('err screenshot', err);
+      });
+
   }
 
   // to base class

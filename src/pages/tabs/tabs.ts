@@ -20,7 +20,10 @@ export class TabsPage {
   tab2: any;
   tab3: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams) {
+    console.log(this.navParams.get('fecha'));
+    
     this.tab1 = NotificacionesPage;
     this.tab2 = HomePage;
     this.tab3 = UbicacionPage;

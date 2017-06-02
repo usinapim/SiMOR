@@ -1,3 +1,4 @@
+import { ConfiguracionPageModule } from './../pages/configuracion/configuracion.module';
 import { Config } from './config/config';
 import { AuthProvider } from './../providers/auth/auth';
 import { ApiProvider } from './../providers/api/api';
@@ -17,6 +18,8 @@ import { MyApp } from './app.component';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { SocialSharing } from '@ionic-native/social-sharing';
+import { Screenshot } from '@ionic-native/screenshot';
 
 @NgModule({
   declarations: [
@@ -31,6 +34,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     NotificacionesPageModule,
     UbicacionPageModule,
     SeleccionarPuertosPageModule,
+    ConfiguracionPageModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot({
       name: '__simor',
@@ -47,7 +51,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Config,
     ApiProvider,
-    AuthProvider
+    AuthProvider,
+    SocialSharing,
+    Screenshot
   ]
 })
 export class AppModule { }
