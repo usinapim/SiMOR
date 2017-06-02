@@ -1,0 +1,7 @@
+export const parameters: Object =
+{
+    apiUrl: "http://localhost/SiMOR-backend/web/app_dev.php/api",
+    apiPath: "",
+    client_id: '1',
+    client_secret: 'DOacpI0Cxy0zPvCBJZhn01yJNnJMMAqHuPsplzfq'
+}
