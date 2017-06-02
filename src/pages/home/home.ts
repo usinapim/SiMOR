@@ -1,7 +1,7 @@
 import { Storage } from '@ionic/storage';
 import { SeleccionarPuertosPage } from './../seleccionar-puertos/seleccionar-puertos';
 import { Component } from '@angular/core';
-import { NavController, ModalController, LoadingController } from 'ionic-angular';
+import { NavController, ModalController, LoadingController, ToastController } from 'ionic-angular';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { Screenshot } from '@ionic-native/screenshot';
 
@@ -20,7 +20,6 @@ export class HomePage {
     this.chart = chartInstance;
   }
 
-
   colorPrincipal = "#393939";
   colorBarra = "#607d8b";
   colorNormal = "#387EF5";
@@ -28,7 +27,7 @@ export class HomePage {
   colorEvacuacion = "#EF473A";
   colorBajaNivel = "#33CD5F";
 
-  puerto = 'Seleccionar Puerto';
+  puerto = 'Seleccionar Ubicación';
   dataToSend: any;
   rio: any;
   puertoSelect: any;
@@ -40,7 +39,8 @@ export class HomePage {
     public loadingCtrl: LoadingController,
     public storage: Storage,
     private socialSharing: SocialSharing,
-    private screenshot: Screenshot) {
+    private screenshot: Screenshot,
+    private toastCtrl: ToastController) {
 
     this.options = {
       chart: {
@@ -283,7 +283,17 @@ export class HomePage {
 
   }
 
+
   // to base class
+
+  presentToast(msg) {
+    let toast = this.toastCtrl.create({
+      message: msg,
+      duration: 3000
+    });
+    toast.present();
+  }
+
   presentLoading() {
     this.loader = this.loadingCtrl.create({
       content: "Cargando...",

@@ -1,3 +1,4 @@
+import { ConfiguracionPage } from './../pages/configuracion/configuracion';
 import { Storage } from '@ionic/storage';
 import { ApiProvider } from './../providers/api/api';
 import { AcercaDePage } from './../pages/acerca-de/acerca-de';
@@ -33,7 +34,8 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Inicio', component: TabsPage },
-      { title: 'Acerca De', component: AcercaDePage }
+      { title: 'Acerca De', component: AcercaDePage },
+      { title: 'Configuración', component: ConfiguracionPage }
     ];
 
   }
