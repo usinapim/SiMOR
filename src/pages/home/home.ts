@@ -29,6 +29,7 @@ export class HomePage {
   colorBajaNivel = "#33CD5F";
 
   puerto = 'Seleccionar Puerto';
+  dataToSend: any;
   rio: any;
   puertoSelect: any;
   variacion = {};
@@ -249,6 +250,7 @@ export class HomePage {
         let modal = this.modalCtrl.create(SeleccionarPuertosPage, { "niveles": val.niveles });
         modal.onDidDismiss(data => {
           if (data) {
+            this.dataToSend = data;
             this.puertoSelect = data.puerto;
             this.puerto = data.puerto.puerto;
             this.rio = data.puerto.rio;
@@ -263,7 +265,11 @@ export class HomePage {
   share() {
     this.screenshot.URI(80).then(
       (data) => {
-        this.socialSharing.share('simor data', 'asunto', data.URI, 'https://play.google.com/store/apps/details?id=org.pim.simor').then(() => {
+        let mensaje = 'Río: ' + this.dataToSend.puerto.rio + '\n' +
+          'Puerto: ' + this.dataToSend.puerto.puerto + '\n' +
+          'Descarga el SiMOR de: '
+          ;
+        this.socialSharing.share(mensaje, 'SiMORA', data.URI, 'https://play.google.com/store/apps/details?id=org.pim.simor').then(() => {
           // Sharing via email is possible
           console.log('shared');
         }).catch(() => {
