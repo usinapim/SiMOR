@@ -20,6 +20,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { Screenshot } from '@ionic-native/screenshot';
+import { Geolocation } from '@ionic-native/geolocation';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { Screenshot } from '@ionic-native/screenshot';
     ApiProvider,
     AuthProvider,
     SocialSharing,
-    Screenshot
+    Screenshot,
+    Geolocation
   ]
 })
 export class AppModule { }

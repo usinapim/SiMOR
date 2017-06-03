@@ -21,6 +21,7 @@
     "@angular/platform-browser": "4.1.2",
     "@angular/platform-browser-dynamic": "4.1.2",
     "@ionic-native/core": "3.10.2",
+    "@ionic-native/geolocation": "^3.11.0",
     "@ionic-native/screenshot": "^3.11.0",
     "@ionic-native/social-sharing": "^3.11.0",
     "@ionic-native/splash-screen": "3.10.2",

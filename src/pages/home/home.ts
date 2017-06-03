@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { NavController, ModalController, LoadingController, ToastController } from 'ionic-angular';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { Screenshot } from '@ionic-native/screenshot';
+import { Geolocation } from '@ionic-native/geolocation';
 
 @Component({
   selector: 'page-home',
@@ -27,11 +28,14 @@ export class HomePage {
   colorEvacuacion = "#EF473A";
   colorBajaNivel = "#33CD5F";
 
+  niveles: any;
   puerto = 'Seleccionar Ubicación';
   dataToSend: any;
   rio: any;
   puertoSelect: any;
   variacion = {};
+  miLat: any;
+  miLong: any;
 
 
   constructor(public navCtrl: NavController,
@@ -40,8 +44,48 @@ export class HomePage {
     public storage: Storage,
     private socialSharing: SocialSharing,
     private screenshot: Screenshot,
-    private toastCtrl: ToastController) {
+    private toastCtrl: ToastController,
+    private geolocation: Geolocation) {
 
+    // carga niveles del storage
+    this.presentLoading();
+    this.storage.get('niveles').then(
+      (val) => {
+        this.fechaDatos = val.fecha;
+        this.niveles = val.niveles;
+        // geolicaliza
+        this.geolocation.getCurrentPosition().then((resp) => {
+          this.miLat = resp.coords.latitude;
+          this.miLong = resp.coords.longitude;
+
+          let distancia = Number.MAX_VALUE;
+          let puerto = null;
+
+          for (let nivel of this.niveles) {
+            let distanciaCal = this.getDistanceFromLatLonInKm(this.miLat, this.miLong, parseFloat(nivel.latitud), parseFloat(nivel.longitud));
+            if (distanciaCal < distancia) {
+              distancia = distanciaCal;
+              puerto = nivel;
+            }
+          }
+
+          // setea el puerteo mas cercano
+          this.puertoSelect = puerto;
+          this.puerto = puerto.puerto;
+          this.rio = puerto.rio;
+          this.itemSelected();
+
+          this.dismissLoading();
+
+        }).catch((error) => {
+          console.log('Error getting location', error);
+          this.dismissLoading();
+        });
+      });
+
+
+
+    // setea patametros del grafico
     this.options = {
       chart: {
         type: 'gauge',
@@ -243,23 +287,41 @@ export class HomePage {
   }
 
   openModalSeleccionarPuertos() {
-    this.presentLoading();
-    this.storage.get('niveles').then(
-      (val) => {
-        this.fechaDatos = val.fecha;
-        let modal = this.modalCtrl.create(SeleccionarPuertosPage, { "niveles": val.niveles });
-        modal.onDidDismiss(data => {
-          if (data) {
-            this.dataToSend = data;
-            this.puertoSelect = data.puerto;
-            this.puerto = data.puerto.puerto;
-            this.rio = data.puerto.rio;
-            this.itemSelected();
-          }
-        });
-        this.dismissLoading();
-        modal.present();
-      });
+
+    let modal = this.modalCtrl.create(SeleccionarPuertosPage, { "niveles": this.niveles });
+    modal.onDidDismiss(data => {
+      if (data) {
+        this.dataToSend = data;
+        this.puertoSelect = data.puerto;
+        this.puerto = data.puerto.puerto;
+        this.rio = data.puerto.rio;
+        this.itemSelected();
+      }
+    });
+
+    modal.present();
+
+
+  }
+
+  getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+    var R = 6371; // Radius of the earth in km
+    var dLat = this.deg2rad(lat2 - lat1);  // deg2rad below
+    var dLon = this.deg2rad(lon2 - lon1);
+    var a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2)
+      ;
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c; // Distance in km
+
+    console.log(d);
+    return d;
+  }
+
+  deg2rad(deg) {
+    return deg * (Math.PI / 180)
   }
 
   share() {
