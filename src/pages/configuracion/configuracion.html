@@ -23,7 +23,7 @@
 
     <ion-item>
       <ion-label>Notificaciones</ion-label>
-      <ion-toggle value="si" checked="true"></ion-toggle>
+      <ion-toggle [(ngModel)]="notificacion" checked="true" (ionChange)="toggleNotification()"></ion-toggle>
     </ion-item>
   </ion-list>
 </ion-content>

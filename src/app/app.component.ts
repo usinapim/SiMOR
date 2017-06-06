@@ -1,3 +1,4 @@
+import { Config } from './config/config';
 import { ConfiguracionPage } from './../pages/configuracion/configuracion';
 import { Storage } from '@ionic/storage';
 import { ApiProvider } from './../providers/api/api';
@@ -7,6 +8,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, LoadingController, ToastController, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { OneSignal } from '@ionic-native/onesignal';
 
 
 @Component({
@@ -27,7 +29,9 @@ export class MyApp {
     public loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     public events: Events,
-    public storage: Storage) {
+    public storage: Storage,
+    private _config: Config,
+    private oneSignal: OneSignal) {
 
     this.initializeApp();
 
@@ -47,6 +51,7 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
       this.cargarRios();
+      this.initOneSignal();
     });
   }
 
@@ -100,6 +105,34 @@ export class MyApp {
       },
       (err) => {
         console.error('err', err)
+      });
+
+  }
+
+  initOneSignal() {
+
+    this.storage.get('notificaciones').then(
+      (val) => {
+        if (!val) {
+          // this.storage.set('notificaciones', true);
+          // this.oneSignal.startInit(this._config.get('oneSignalAppId'), this._config.get('googleProjectNumber'));
+
+          // this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
+
+          // this.oneSignal.handleNotificationReceived().subscribe(() => {
+          //   // do something when notification is received
+          // });
+
+          // this.oneSignal.handleNotificationOpened().subscribe(() => {
+          //   // do something when a notification is opened
+          // });
+
+          // this.oneSignal.endInit();
+        }
+
+      },
+      (err) => {
+        console.error('notificaciones err', err)
       });
 
   }

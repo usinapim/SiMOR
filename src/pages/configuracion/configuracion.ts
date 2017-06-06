@@ -1,5 +1,7 @@
+import { Storage } from '@ionic/storage';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { OneSignal } from '@ionic-native/onesignal';
 
 /**
  * Generated class for the ConfiguracionPage page.
@@ -14,12 +16,34 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ConfiguracionPage {
 
+  notificacion = true;
+
   constructor(public navCtrl: NavController,
-    public navParams: NavParams) {
+    public navParams: NavParams,
+    public storage: Storage,
+    private oneSignal: OneSignal) {
+
+    this.storage.get('notificaciones').then(
+      (val) => {
+        if (!val) {
+          this.notificacion = false;
+        } else {
+          this.notificacion = true;
+        }
+      },
+      (err) => {
+        console.error('notificaciones err', err)
+      });
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ConfiguracionPage');
   }
+
+  toggleNotification() {
+    // console.log(this.notificacion);
+    this.oneSignal.setSubscription(this.notificacion);
+  }
+
 
 }

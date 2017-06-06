@@ -1,3 +1,4 @@
+import { GeocodingService } from './../directives/map/geocode.service';
 import { ConfiguracionPageModule } from './../pages/configuracion/configuracion.module';
 import { Config } from './config/config';
 import { AuthProvider } from './../providers/auth/auth';
@@ -14,6 +15,8 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { HttpModule } from "@angular/http";
 import { IonicStorageModule } from "@ionic/storage";
 
+import { MapService } from './../directives/map/map.service';
+
 import { MyApp } from './app.component';
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -21,6 +24,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { Screenshot } from '@ionic-native/screenshot';
 import { Geolocation } from '@ionic-native/geolocation';
+import { OneSignal } from '@ionic-native/onesignal';
 
 @NgModule({
   declarations: [
@@ -55,7 +59,10 @@ import { Geolocation } from '@ionic-native/geolocation';
     AuthProvider,
     SocialSharing,
     Screenshot,
-    Geolocation
+    Geolocation,
+    OneSignal,
+    GeocodingService,
+    MapService
   ]
 })
 export class AppModule { }
