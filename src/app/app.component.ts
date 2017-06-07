@@ -79,8 +79,8 @@ export class MyApp {
 
     this.storage.get('niveles').then(
       (val) => {
-        console.log(val);
-        if (!val || val.fecha !== hoy) {
+
+        if (!val || val == null || val.fecha !== hoy) {
           this.apiProvider.getAll('niveles')
             .then(
             (data) => {

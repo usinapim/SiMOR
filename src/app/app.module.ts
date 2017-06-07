@@ -1,4 +1,4 @@
-import { GeocodingService } from './../directives/map/geocode.service';
+import { PuertoPageModule } from './../pages/puerto/puerto.module';
 import { ConfiguracionPageModule } from './../pages/configuracion/configuracion.module';
 import { Config } from './config/config';
 import { AuthProvider } from './../providers/auth/auth';
@@ -39,6 +39,7 @@ import { OneSignal } from '@ionic-native/onesignal';
     NotificacionesPageModule,
     UbicacionPageModule,
     SeleccionarPuertosPageModule,
+    PuertoPageModule,
     ConfiguracionPageModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot({
@@ -61,7 +62,6 @@ import { OneSignal } from '@ionic-native/onesignal';
     Screenshot,
     Geolocation,
     OneSignal,
-    GeocodingService,
     MapService
   ]
 })

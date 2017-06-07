@@ -1,9 +1,9 @@
-import { Storage } from '@ionic/storage';
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, Select } from 'ionic-angular';
-import { MapService } from '../../directives/map/map.service';
-import { GeocodingService } from "../../directives/map/geocode.service";
+import { PuertoPage } from './../puerto/puerto';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import mapboxgl from 'mapbox-gl';
 import { Geolocation } from '@ionic-native/geolocation';
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the UbicacionPage page.
@@ -18,177 +18,104 @@ import { Geolocation } from '@ionic-native/geolocation';
 })
 export class UbicacionPage {
 
-  @ViewChild('contenedorMapaLugares') contenedorMapa: ElementRef;
-  @ViewChild('searchKm') searchKm: Select;
-
-  // domAdapter: BrowserDomAdapter = new BrowserDomAdapter();
-  lugares = [];
-  kms = {
-    km: 5,
-    zoom: 13,
-  };
+  @ViewChild('contenedorMapa') contenedorMapa: ElementRef;
   map: any;
 
-  distancias = [
-    {
-      km: 5,
-      zoom: 13,
-      descripcion: 'Menos de 5 kms.',
-    },
-    {
-      km: 10,
-      zoom: 11,
-      descripcion: 'Menos de 10 kms.',
-    },
-    {
-      km: 50,
-      zoom: 9,
-      descripcion: 'Menos de 50 kms.',
-    },
-    {
-      km: 100,
-      zoom: 8,
-      descripcion: 'Menos de 100 kms.',
-    },
-    {
-      km: 300,
-      zoom: 7,
-      descripcion: 'Menos de 300 kms.',
-    },
-    {
-      km: -1,
-      zoom: 6,
-      descripcion: 'Más de kms.',
-    }
+  localization: any;
+  miLong: any;
+  niveles: any;
 
-  ]
-  constructor(public params: NavParams,
-    public navCtrl: NavController,
-    public loadCtrl: LoadingController,
-    public mapService: MapService,
-    public elementRef: ElementRef,
-    private geolocation: Geolocation,
-    public geocoder: GeocodingService,
-    public storage: Storage) {
-    // this.lugares = this.params.get('lugares');
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
+    public storage: Storage,
+    private geolocation: Geolocation) {
+  }
+
+  async ionViewDidLoad() {
+    let mapId = 'map';
+
+    this.localization = await this.geolocation.getCurrentPosition();
+
+    console.log(this.localization);
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic2VyZ2lvc2FuYWJyaWEiLCJhIjoiY2oza2ZscXh4MDBvajMzb3poaGkxajhkayJ9.jZ8b6iJnVkTDwoE6nbAzrQ';
+    this.contenedorMapa.nativeElement.innerHTML = '<div class="map" id="' + mapId + '"></div>';
+    this.map = new mapboxgl.Map({
+      container: 'map', // container id
+      style: 'mapbox://styles/mapbox/streets-v9', //stylesheet location
+      center: [this.localization.coords.longitude, this.localization.coords.latitude], // starting position
+      zoom: 7 // starting zoom
+    });
+    this.cargarMapa();
+  }
+
+  cargarMapa() {
 
     this.storage.get('niveles').then(
       (val) => {
-        this.lugares = val.niveles;
+
+        this.niveles = val.niveles;
+
+        for (let nivel of this.niveles) {
+          var el = document.createElement('div');
+          el.className = 'marker';
+
+          let variacion = nivel.variacion ? parseFloat(nivel.variacion) : false;
+          let variacionStr: String;
+          let color = '';
+
+          if (variacion !== false) {
+            if (variacion > 0) {
+              el.className += ' up';
+              variacionStr = ' ↑ ' + variacion;
+              color = "#f53d3d";
+            } else if (variacion < 0) {
+              el.className += ' down';
+              variacionStr = ' ↓ ' + variacion;
+              color = "#32db64";
+            } else if (variacion == 0) {
+              el.className += ' equal';
+              variacionStr = ' = ' + variacion;
+              color = "#488aff";
+            }
+          }
+
+          if (nivel.longitud) {
+            console.log(nivel);
+          }
+
+          let marker = new mapboxgl.Marker(el)
+            .setLngLat([nivel.longitud, nivel.latitud]);
+
+          let popUpDiv = document.createElement('div');
+          popUpDiv.style.color = color;
+          popUpDiv.innerHTML += "<p><b>Rio</b>: " + nivel.rio + "</p>";
+          popUpDiv.innerHTML += "<p><b>Puerto</b>: " + nivel.puerto + "</p>";
+
+          if (variacion !== 0) {
+            popUpDiv.innerHTML += "<p><b>Variacion</b>: " + variacionStr + " mts</span></p>";
+          }
+
+          popUpDiv.innerHTML += "<p><b>Nivel</b>: " + nivel.ultimo_registro + " mts</p>";
+
+          popUpDiv.addEventListener('click', () => {
+            this.puertoDetails(nivel);
+          })
+          let popUp = new mapboxgl.Popup()
+            .setDOMContent(popUpDiv);
+
+          marker.setPopup(
+            popUp
+          );
+          marker.addTo(this.map);
+
+        }
       });
-
   }
 
-
-  ionViewDidEnter() {
-
-
-    this.rangeChange();
-  }
-
-
-
-  opensearchKm() {
-    this.searchKm.open();
-  }
-
-  rangeChange() {
-
-    var loader = this.loadCtrl.create({
-      content: "Espere, por favor"
+  puertoDetails(nivel) {
+    this.navCtrl.push(PuertoPage, {
+      puerto: nivel
     });
-
-    loader.present();
-
-    this.geolocation.getCurrentPosition().then((resp) => {
-
-      console.log(resp);
-
-      this.createMakers(resp.coords.latitude, resp.coords.longitude, loader);
-
-      this.mapService.setPosition(resp.coords.latitude, resp.coords.longitude);
-      this.mapService.setBound(resp.coords.latitude - 0.02, resp.coords.longitude - 0.02, resp.coords.latitude + 0.02, resp.coords.longitude + 0.02);
-    }).catch((error) => {
-
-      loader.dismissAll();
-      console.log('Error getting location', error);
-      console.log(error);
-
-
-    });
-  }
-
-  createMakers(latD, lonD, loader) {
-
-    let mapId = 'mapa-lugares-id';
-    let zoom = this.kms.zoom;
-
-    // if (!utils.isUndefined(this.map)) {
-    //     zoom = this.map.getZoom();
-    //
-    // }
-
-    this.contenedorMapa.nativeElement.innerHTML = '<div class="angular-leaflet-map" style="height: 60rem"  id="' + mapId + '"></div>';
-
-    this.map = this.mapService.createMap(mapId, latD, lonD);
-
-    this.map.setZoom(zoom);
-
-    this.mapService.createCircle(latD, lonD, this.kms.km);
-
-    for (let e of this.lugares) {
-
-      if (this.lugares[this.lugares.length - 1] == e) {
-        loader.dismissAll();
-      }
-
-      if (e.longitud == null) {
-        continue;
-      }
-
-      let lng = e.longitud;
-      let lat = e.latitud;
-
-      let latlng = [];
-      latlng.push(lat);
-      latlng.push(lng);
-
-
-      let kms = this.mapService.getDistanceFromLatLonInKm(latD, lonD, lat, lng);
-
-      if (this.kms.km > 0 && kms > this.kms.km) {
-        continue;
-      }
-
-
-      let newDiv: HTMLDivElement;
-      newDiv = document.createElement("div");
-      // let newContent = document.createTextNode(e.nombre.toUpperCase());
-      document.createTextNode(e.puerto.toUpperCase());
-
-
-      // let img: HTMLImageElement;
-      // img = document.createElement('img');
-      // newDiv.style.color = e.color;
-      // newDiv.appendChild(newContent);
-      // newDiv.appendChild(img);
-
-      //console.log(e.image_name)
-      // img.src = e.image_name ? e.image_name : 'assets/img/icono_empresa.png';
-      //img.src = "http://www.goleamos.com/post/boca.png";
-      // this.domAdapter.on(newDiv, 'click', this.open.bind(this, e));
-      // this.domAdapter.appendChild(this.elementRef.nativeElement, newDiv);
-
-      this.mapService.addMarker(latlng, e.puerto.toUpperCase());
-
-      //this.mapService.addText(e.nombre);
-
-    }
-  }
-
-  open(lugar) {
-    // TODO: se deberia abrir la page de lugar
-    // this.navCtrl()
   }
 
 }

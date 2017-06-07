@@ -48,8 +48,29 @@ export class ApiProvider {
     getPlacesMapBox(text): Promise<any> {
 
         let url = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
-        let token = ".json?country=ar&access_token=pk.eyJ1Ijoic2VyZ2lvc2FuYWJyaWEiLCJhIjoiY2oyMXVrOGZvMDAwMjMycGNrODltb2J3ciJ9.VMWOMgix8djMTesRJMDHVg";
+        let token = ".json?country=ar&access_token=pk.eyJ1Ijoic2VyZ2lvc2FuYWJyaWEiLCJhIjoiY2oza2ZscXh4MDBvajMzb3poaGkxajhkayJ9.jZ8b6iJnVkTDwoE6nbAzrQ";
         return this.http.get(url + text + token, this.options)
+            .debounceTime(700)
+            .toPromise()
+            .then(this.extractData)
+            .catch(this.handleError);
+    }
+
+    openWeatherApi(lat, lng): Promise<any> {
+
+        let url = "http://api.openweathermap.org/data/2.5/weather";
+        let token = "04f39f661f63c839a9b8277552a303c5";
+        let search = new URLSearchParams();
+        search.append('lat', lat);
+        search.append('lon', lng);
+        search.append('appid', token);
+        search.append('lang', 'es');
+
+        let options = new RequestOptions(this.opt);
+
+        options.params = search;
+
+        return this.http.get(url, options)
             .debounceTime(700)
             .toPromise()
             .then(this.extractData)

@@ -20,22 +20,11 @@
     <ion-title>
       <img class="simor-logo" src="assets/img/SiMORA.png" />
     </ion-title>
-    <ion-item [hidden]="true">
-      <ion-label>{{'distancia' }}</ion-label>
-      <ion-select (ionChange)="rangeChange()" [cancelText]="('cancelar' )" [okText]="('OK' )" #searchKm center [(ngModel)]="kms">
-        <ion-option *ngFor="let k of distancias" [value]="k">
-          {{ k.descripcion }}
-        </ion-option>
-      </ion-select>
-    </ion-item>
-    <ion-buttons end>
-      <button (click)="opensearchKm()" icon-only ion-button>
-                <ion-icon name="search"></ion-icon>
-            </button>
-    </ion-buttons>
+
   </ion-navbar>
 </ion-header>
 
-<ion-content>
-  <div #contenedorMapaLugares class="angular-leaflet-map"></div>
+
+<ion-content no-padding no-scroll>
+  <div #contenedorMapa ></div>
 </ion-content>
