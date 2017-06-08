@@ -45,8 +45,8 @@ export class UbicacionPage {
         console.log('Error getting location', error);
         this.localization = {
           coords: {
-            longitude: -27.36,
-            latitude: -55.89
+            longitude: -55.89,
+            latitude: -27.36,
           }
         }
         this.initMapa();
@@ -60,7 +60,7 @@ export class UbicacionPage {
     this.contenedorMapa.nativeElement.innerHTML = '<div class="map" id="' + mapId + '"></div>';
     this.map = new mapboxgl.Map({
       container: 'map', // container id
-      style: 'mapbox://styles/mapbox/streets-v9', //stylesheet location
+      style: 'mapbox://styles/mapbox/streets-v10', //stylesheet location
       center: [this.localization.coords.longitude, this.localization.coords.latitude], // starting position
       zoom: 7 // starting zoom
     });
@@ -73,8 +73,10 @@ export class UbicacionPage {
       (val) => {
 
         this.niveles = val.niveles;
-
         for (let nivel of this.niveles) {
+          if (!nivel.longitud || !nivel.latitud) {
+            continue;
+          }
           var el = document.createElement('div');
           el.className = 'marker';
 
@@ -118,7 +120,8 @@ export class UbicacionPage {
 
           popUpDiv.addEventListener('click', () => {
             this.puertoDetails(nivel);
-          })
+          });
+
           let popUp = new mapboxgl.Popup()
             .setDOMContent(popUpDiv);
 
