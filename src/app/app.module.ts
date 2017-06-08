@@ -15,8 +15,6 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { HttpModule } from "@angular/http";
 import { IonicStorageModule } from "@ionic/storage";
 
-import { MapService } from './../directives/map/map.service';
-
 import { MyApp } from './app.component';
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -61,8 +59,7 @@ import { OneSignal } from '@ionic-native/onesignal';
     SocialSharing,
     Screenshot,
     Geolocation,
-    OneSignal,
-    MapService
+    OneSignal
   ]
 })
 export class AppModule { }

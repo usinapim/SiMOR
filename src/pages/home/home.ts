@@ -54,33 +54,34 @@ export class HomePage {
         this.fechaDatos = val.fecha;
         this.niveles = val.niveles;
         // geolicaliza
-        this.geolocation.getCurrentPosition().then((resp) => {
-          this.miLat = resp.coords.latitude;
-          this.miLong = resp.coords.longitude;
+        this.geolocation.getCurrentPosition({timeout: 15000}).then(
+          (resp) => {
+            this.miLat = resp.coords.latitude;
+            this.miLong = resp.coords.longitude;
 
-          let distancia = Number.MAX_VALUE;
-          let puerto = null;
+            let distancia = Number.MAX_VALUE;
+            let puerto = null;
 
-          for (let nivel of this.niveles) {
-            let distanciaCal = this.getDistanceFromLatLonInKm(this.miLat, this.miLong, parseFloat(nivel.latitud), parseFloat(nivel.longitud));
-            if (distanciaCal < distancia) {
-              distancia = distanciaCal;
-              puerto = nivel;
+            for (let nivel of this.niveles) {
+              let distanciaCal = this.getDistanceFromLatLonInKm(this.miLat, this.miLong, parseFloat(nivel.latitud), parseFloat(nivel.longitud));
+              if (distanciaCal < distancia) {
+                distancia = distanciaCal;
+                puerto = nivel;
+              }
             }
-          }
 
-          // setea el puerteo mas cercano
-          this.puertoSelect = puerto;
-          this.puerto = puerto.puerto;
-          this.rio = puerto.rio;
-          this.itemSelected();
+            // setea el puerteo mas cercano
+            this.puertoSelect = puerto;
+            this.puerto = puerto.puerto;
+            this.rio = puerto.rio;
+            this.itemSelected();
 
-          this.dismissLoading();
+            this.dismissLoading();
 
-        }).catch((error) => {
-          console.log('Error getting location', error);
-          this.dismissLoading();
-        });
+          }).catch((error) => {
+            console.log('Error getting location', error);
+            this.dismissLoading();
+          });
       });
 
 

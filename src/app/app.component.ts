@@ -17,7 +17,7 @@ import { OneSignal } from '@ionic-native/onesignal';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = TabsPage;
+  rootPage: any;
   loader: any;
 
   pages: Array<{ title: string, component: any }>;
@@ -79,8 +79,7 @@ export class MyApp {
 
     this.storage.get('niveles').then(
       (val) => {
-
-        if (!val || val == null || val.fecha !== hoy) {
+        if (!val || val === null || val.fecha === null || val.fecha !== hoy) {
           this.apiProvider.getAll('niveles')
             .then(
             (data) => {
@@ -93,6 +92,7 @@ export class MyApp {
               this.storage.clear().then(
                 () => {
                   this.storage.set('niveles', toStore);
+                  this.rootPage = TabsPage;
                   this.dismissLoading();
                 }
               )
@@ -100,6 +100,7 @@ export class MyApp {
             err => this.handleError.bind(this)
             );
         } else {
+          this.rootPage = TabsPage;
           this.dismissLoading();
         }
       },
@@ -114,20 +115,20 @@ export class MyApp {
     this.storage.get('notificaciones').then(
       (val) => {
         if (!val) {
-          // this.storage.set('notificaciones', true);
-          // this.oneSignal.startInit(this._config.get('oneSignalAppId'), this._config.get('googleProjectNumber'));
+          this.storage.set('notificaciones', true);
+          this.oneSignal.startInit(this._config.get('oneSignalAppId'), this._config.get('googleProjectNumber'));
 
-          // this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
+          this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
 
-          // this.oneSignal.handleNotificationReceived().subscribe(() => {
-          //   // do something when notification is received
-          // });
+          this.oneSignal.handleNotificationReceived().subscribe(() => {
+            // do something when notification is received
+          });
 
-          // this.oneSignal.handleNotificationOpened().subscribe(() => {
-          //   // do something when a notification is opened
-          // });
+          this.oneSignal.handleNotificationOpened().subscribe(() => {
+            // do something when a notification is opened
+          });
 
-          // this.oneSignal.endInit();
+          this.oneSignal.endInit();
         }
 
       },

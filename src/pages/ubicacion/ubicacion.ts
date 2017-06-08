@@ -1,6 +1,6 @@
 import { PuertoPage } from './../puerto/puerto';
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import mapboxgl from 'mapbox-gl';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Storage } from '@ionic/storage';
@@ -20,6 +20,7 @@ export class UbicacionPage {
 
   @ViewChild('contenedorMapa') contenedorMapa: ElementRef;
   map: any;
+  loader: any;
 
   localization: any;
   miLong: any;
@@ -28,15 +29,33 @@ export class UbicacionPage {
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public storage: Storage,
+    public loadingCtrl: LoadingController,
+    private toastCtrl: ToastController,
     private geolocation: Geolocation) {
   }
 
-  async ionViewDidLoad() {
+  ionViewDidLoad() {
+    this.presentLoading();
+
+    this.geolocation.getCurrentPosition({ timeout: 15000 }).then(
+      (resp) => {
+        this.localization = resp;
+        this.initMapa();
+      }).catch((error) => {
+        console.log('Error getting location', error);
+        this.localization = {
+          coords: {
+            longitude: -27.36,
+            latitude: -55.89
+          }
+        }
+        this.initMapa();
+      });
+
+  }
+
+  initMapa() {
     let mapId = 'map';
-
-    this.localization = await this.geolocation.getCurrentPosition();
-
-    console.log(this.localization);
     mapboxgl.accessToken = 'pk.eyJ1Ijoic2VyZ2lvc2FuYWJyaWEiLCJhIjoiY2oza2ZscXh4MDBvajMzb3poaGkxajhkayJ9.jZ8b6iJnVkTDwoE6nbAzrQ';
     this.contenedorMapa.nativeElement.innerHTML = '<div class="map" id="' + mapId + '"></div>';
     this.map = new mapboxgl.Map({
@@ -109,13 +128,38 @@ export class UbicacionPage {
           marker.addTo(this.map);
 
         }
+        this.dismissLoading();
       });
   }
 
+  // to base class
   puertoDetails(nivel) {
     this.navCtrl.push(PuertoPage, {
       puerto: nivel
     });
   }
 
+  presentToast(msg) {
+    let toast = this.toastCtrl.create({
+      message: msg,
+      duration: 3000
+    });
+    toast.present();
+  }
+
+  presentLoading() {
+    this.loader = this.loadingCtrl.create({
+      content: "Cargando...",
+    });
+    this.loader.present();
+  }
+
+  dismissLoading() {
+
+    console.log(this.loader);
+    if (this.loader) {
+      this.loader.dismiss();
+    }
+
+  }
 }
