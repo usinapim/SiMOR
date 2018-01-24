@@ -1,51 +1,26 @@
-SiMOR
-====================
+This is a starter template for [Ionic](http://ionicframework.com/docs/) projects.
 
-Cordova project 
+## How to use this template
 
-[SiMOR](https://play.google.com/store/apps/details?id=org.pim.simor)
+*This template does not work on its own*. The shared files for each starter are found in the [ionic2-app-base repo](https://github.com/ionic-team/ionic2-app-base).
 
-Prerequistes:
-- [Cordova 5.4.0](https://cordova.apache.org/)
-- [Android SDK](http://developer.android.com/intl/es/sdk/index.html)
+To use this template, either create a new ionic project using the ionic node.js utility, or copy the files from this repository into the [Starter App Base](https://github.com/ionic-team/ionic2-app-base).
 
-Plattforms:
-- android 4.1.1
-- browser 4.0.0
-- ios 3.9.2
+### With the Ionic CLI:
 
-1. clone proyect:
+Take the name after `ionic2-starter-`, and that is the name of the template to be used when using the `ionic start` command below:
 
-in project path runs 
-
-```
-$ cordova platform add android@4.1.1
+```bash
+$ sudo npm install -g ionic cordova
+$ ionic start myBlank blank
 ```
 
-2. in AndroidManifest.xml edit:
+Then, to run it, cd into `myBlank` and run:
 
-    ```xml
-    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="22" />
-    ```
-
-Cordova plugins list:
-
-- cordova-plugin-battery-status 1.1.1-dev "Battery"
-- cordova-plugin-console 1.0.2-dev "Console"
-- cordova-plugin-device 1.1.2-dev "Device"
-- cordova-plugin-dialogs 1.1.2-dev "Notification"
-- cordova-plugin-file 3.0.0 "File"
-- cordova-plugin-geolocation 2.1.0 "Geolocation"
-- cordova-plugin-globalization 1.0.2-dev "Globalization"
-- cordova-plugin-network-information 1.0.2-dev "Network Information"
-- cordova-plugin-splashscreen 3.0.0-dev "Splashscreen"
-- cordova-plugin-whitelist 1.2.1 "Whitelist"
-- cordova.plugins.diagnostic.api-22 2.3.10-api-22 "Diagnostic"
-- phonegap-plugin-push 1.6.3 "PushPlugin"
-- cordova-plugin-x-toast 2.5.1 "PhoneGap Toast plugin"
-
-```
-$ cordova emulate android
+```bash
+$ ionic cordova platform add ios
+$ ionic cordova run ios
 ```
 
-Enjoy!
+Substitute ios for android if not on a Mac.
+

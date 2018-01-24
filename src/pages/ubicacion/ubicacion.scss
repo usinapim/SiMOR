@@ -1,0 +1,43 @@
+page-ubicacion {
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    .map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+    }
+    .mapboxgl-popup {
+        color: #000;
+        p {
+            margin: 5px 0px ! important;
+            font-size: 1.5rem;
+        }
+    }
+    .marker {
+        /* Full height */
+        height: 30px;
+        width: 30px;
+        top: -15px;
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .up {
+        /* The image used */
+        background-image: url("../assets/img/niveles/up.svg");
+    }
+    .down {
+        /* The image used */
+        background-image: url("../assets/img/niveles/down.svg");
+        height: 40px;
+        width: 40px;
+    }
+    .equal {
+        /* The image used */
+        background-image: url("../assets/img/niveles/equal.svg");
+    }
+}

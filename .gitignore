@@ -1,76 +1,37 @@
-# ANDROID / ECLIPSE
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore
 
-# built application files
-*.apk
-*.ap_
+*~
+*.sw[mnpcod]
+*.log
+*.tmp
+*.tmp.*
+log.txt
+*.sublime-project
+*.sublime-workspace
+.vscode/
+npm-debug.log*
 
-# files for the dex VM
-*.dex
-
-# Java class files
-*.class
-
-# generated files - android project subfolder
-Android/bin/
-Android/gen/
-Android/assets/
-
-# generated files
-bin/
-gen/
-
-# Local configuration file (sdk path, etc)
-local.properties
-
-# Node
-npm-debug.log
-/node_modules
-
-# Cordova
-/platforms
-/plugins
-
-# res
-resources/signing
-
-# IOS / Xcode
-build/*
-*.pbxuser
-!default.pbxuser
-*.mode1v3
-!default.mode1v3
-*.mode2v3
-!default.mode2v3
-*.perspectivev3
-!default.perspectivev3
-*.xcworkspace
-!default.xcworkspace
-xcuserdata
-profile
-*.moved-aside
-IOS/www/
-
-# netbeans
-nbproject/
-
-# -- Sistemas Operativos ------------------------------
-# Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
+.idea/
+.sass-cache/
+.tmp/
+.versions/
+coverage/
+dist/
+node_modules/
+tmp/
+temp/
+hooks/
+platforms/
+plugins/
+plugins/android.json
+plugins/ios.json
+www/
 $RECYCLE.BIN/
 
-# Linux
-.*
-!.gitignore
-!.htaccess
-*~
-
-# Mac OS X
 .DS_Store
-.AppleDouble
-.LSOverride
-Icon
-._*
-.Spotlight-V100
-.Trashes
+Thumbs.db
+UserInterfaceState.xcuserstate
+
+#custom
+/src/app/config/parameters.ts

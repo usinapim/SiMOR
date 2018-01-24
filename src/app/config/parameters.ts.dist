@@ -1,0 +1,9 @@
+export const parameters: Object =
+{
+    apiUrl: "http://localhost/SiMOR-backend/web/app_dev.php/api",
+    apiPath: "",
+    oneSignalAppId: 'eeeeeee-aaaa-1111-1234-123456789012',
+    googleProjectNumber: '123123123',
+    client_id: '1',
+    client_secret: 'DOacpI0Cxy0zPvCBJZhn01yJNnJMMAqHuPsplzfq'
+}
