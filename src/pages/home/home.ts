@@ -5,6 +5,7 @@ import { NavController, ModalController, LoadingController, ToastController } fr
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { Screenshot } from '@ionic-native/screenshot';
 import { Geolocation } from '@ionic-native/geolocation';
+import { PuertoPage } from '../puerto/puerto';
 
 @Component({
   selector: 'page-home',
@@ -54,19 +55,24 @@ export class HomePage {
         this.fechaDatos = val.fecha;
         this.niveles = val.niveles;
         // geolicaliza
-        this.geolocation.getCurrentPosition({timeout: 15000}).then(
+        this.geolocation.getCurrentPosition({timeout: 10000}).then(
           (resp) => {
             this.miLat = resp.coords.latitude;
             this.miLong = resp.coords.longitude;
+
+            console.log('resp.coords.',  resp.coords)
 
             let distancia = Number.MAX_VALUE;
             let puerto = null;
 
             for (let nivel of this.niveles) {
-              let distanciaCal = this.getDistanceFromLatLonInKm(this.miLat, this.miLong, parseFloat(nivel.latitud), parseFloat(nivel.longitud));
-              if (distanciaCal < distancia) {
-                distancia = distanciaCal;
-                puerto = nivel;
+              if (nivel.latitud && nivel.longitud)  {
+                console.log('nivel', nivel)
+                let distanciaCal = this.getDistanceFromLatLonInKm(this.miLat, this.miLong, parseFloat(nivel.latitud), parseFloat(nivel.longitud));
+                if (distanciaCal < distancia) {
+                  distancia = distanciaCal;
+                  puerto = nivel;
+                }
               }
             }
 
@@ -174,7 +180,10 @@ export class HomePage {
         }]
       },
       series: this.getSeries(),
-      loading: false
+      loading: false,
+      credits: {
+        enabled: false
+      },
     }
   }
 
@@ -317,7 +326,7 @@ export class HomePage {
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c; // Distance in km
 
-    console.log(d);
+    console.log('distance', d);
     return d;
   }
 
@@ -346,6 +355,11 @@ export class HomePage {
 
   }
 
+  puertoDetails() {
+    this.navCtrl.push(PuertoPage, {
+      puerto: this.puertoSelect
+    });
+  }
 
   // to base class
 

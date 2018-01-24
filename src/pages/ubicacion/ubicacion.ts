@@ -37,7 +37,7 @@ export class UbicacionPage {
   ionViewDidLoad() {
     this.presentLoading();
 
-    this.geolocation.getCurrentPosition({ timeout: 15000 }).then(
+    this.geolocation.getCurrentPosition({ timeout: 10000 }).then(
       (resp) => {
         this.localization = resp;
         this.initMapa();
@@ -100,35 +100,36 @@ export class UbicacionPage {
             }
           }
 
-          if (nivel.longitud) {
-            console.log(nivel);
+          if (!isNaN(nivel.longitud)) {
+            console.log('nivel', nivel);
+
+            let marker = new mapboxgl.Marker(el)
+              .setLngLat([nivel.longitud, nivel.latitud]);
+            // .setLngLat([-25, -54]);
+
+            let popUpDiv = document.createElement('div');
+            popUpDiv.style.color = color;
+            popUpDiv.innerHTML += "<p><b>Rio</b>: " + nivel.rio + "</p>";
+            popUpDiv.innerHTML += "<p><b>Puerto</b>: " + nivel.puerto + "</p>";
+
+            if (variacion !== 0) {
+              popUpDiv.innerHTML += "<p><b>Variacion</b>: " + variacionStr + " mts</span></p>";
+            }
+
+            popUpDiv.innerHTML += "<p><b>Nivel</b>: " + nivel.ultimo_registro + " mts</p>";
+
+            popUpDiv.addEventListener('click', () => {
+              this.puertoDetails(nivel);
+            });
+
+            let popUp = new mapboxgl.Popup()
+              .setDOMContent(popUpDiv);
+
+            marker.setPopup(
+              popUp
+            );
+            marker.addTo(this.map);
           }
-
-          let marker = new mapboxgl.Marker(el)
-            .setLngLat([nivel.longitud, nivel.latitud]);
-
-          let popUpDiv = document.createElement('div');
-          popUpDiv.style.color = color;
-          popUpDiv.innerHTML += "<p><b>Rio</b>: " + nivel.rio + "</p>";
-          popUpDiv.innerHTML += "<p><b>Puerto</b>: " + nivel.puerto + "</p>";
-
-          if (variacion !== 0) {
-            popUpDiv.innerHTML += "<p><b>Variacion</b>: " + variacionStr + " mts</span></p>";
-          }
-
-          popUpDiv.innerHTML += "<p><b>Nivel</b>: " + nivel.ultimo_registro + " mts</p>";
-
-          popUpDiv.addEventListener('click', () => {
-            this.puertoDetails(nivel);
-          });
-
-          let popUp = new mapboxgl.Popup()
-            .setDOMContent(popUpDiv);
-
-          marker.setPopup(
-            popUp
-          );
-          marker.addTo(this.map);
 
         }
         this.dismissLoading();
